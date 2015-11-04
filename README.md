@@ -3,6 +3,8 @@
 [![Software License](https://img.shields.io/github/license/sergeyklay/aerospike-php-stubs.svg?style=flat-square)](LICENSE)
 [![Total Downloads](https://img.shields.io/packagist/dt/sergeyklay/aerospike-php-stubs.svg?style=flat-square)](https://packagist.org/packages/sergeyklay/aerospike-php-stubs)
 
+![screenshot](http://i.imgur.com/55EKJIU.png "Screenshot")
+
 When working with PHP Aerospike class may crop up some difficulties when to use syntax highlighting or code autocompletion.
 This repo provide the most complete Aerospike PHP stubs which allows autocomplete in modern IDEs.
 
