@@ -6,7 +6,7 @@
 When working with PHP Aerospike class may crop up some difficulties when to use syntax highlighting or code autocompletion.
 This repo provide the most complete Aerospike PHP stubs which allows autocomplete in modern IDEs.
 
-Grabbed bu using [Reflection](http://php.net/manual/en/book.reflection.php) from `aerospike.so` v.3.4.5
+Grabbed bu using [Reflection](http://php.net/manual/en/book.reflection.php) from `aerospike.so` v3.4.5
 
 ## Install
 
