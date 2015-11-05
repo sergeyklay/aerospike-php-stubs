@@ -140,6 +140,16 @@ final class Aerospike
     const ERR_BIN_EXISTS = 6;
 
     /**
+     * @var int
+     */
+    private $errorno;
+
+    /**
+     * @var string
+     */
+    private $error;
+
+    /**
      * @param array $config
      * @param bool  $persistent
      * @param array $options
