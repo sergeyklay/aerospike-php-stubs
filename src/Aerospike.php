@@ -180,6 +180,15 @@ final class Aerospike
     }
 
     /**
+     * Reconnect to the Aerospike DB
+     *
+     * <code>
+     * $db = new Aerospike($config, true, $opts);
+     *
+     * $db->close();
+     * $db->reconnect();
+     * </code>
+     *
      * @return void
      */
     public function reconnect()
@@ -187,6 +196,17 @@ final class Aerospike
     }
 
     /**
+     * Display an error message associated with the last operation.
+     *
+     * <code>
+     * $db = new Aerospike($config);
+     *
+     * if (!$db->isConnected()) {
+     *     echo "Aerospike failed to connect[{$db->errorno()}]: {$db->error()}\n";
+     *     exit(1);
+     * }
+     * <code>
+     *
      * @return string
      */
     public function error()
@@ -194,6 +214,17 @@ final class Aerospike
     }
 
     /**
+     * Display an error code associated with the last operation.
+     *
+     * <code>
+     * $db = new Aerospike($config);
+     *
+     * if (!$db->isConnected()) {
+     *     echo "Aerospike failed to connect[{$db->errorno()}]: {$db->error()}\n";
+     *     exit(1);
+     * }
+     * <code>
+     *
      * @return int
      */
     public function errorno()
@@ -587,10 +618,19 @@ final class Aerospike
     }
 
     /**
-     * @param string $request
-     * @param string $response
-     * @param array  $host
-     * @param array  $options
+     * Send an info request to a single cluster node
+     *
+     * <code>
+     * $db = new Aerospike($config, true, $opts);
+     * $status = $db->info('bins/test', $response);
+     *
+     * var_dump($status, $response);
+     * </code>
+     *
+     * @param string $request  A formatted string representing a command and control operation.
+     * @param string $response A formatted response from the server.
+     * @param array  $host     An array holding the cluster node connection information cluster and manage its connections to them.
+     * @param array  $options  Options including Aerospike::OPT_READ_TIMEOUT
      *
      * @return int
      */
@@ -610,13 +650,20 @@ final class Aerospike
     }
 
     /**
-     * @return array
+     * Get the addresses of the cluster nodes
+     *
+     * <code>
+     * $db = new Aerospike($config, true, $opts);
+     * $nodes = $db->getNodes();
+     *
+     * var_dump($nodes);
+     * </code>
+     *
+     * @return array|null
      */
     public function getNodes()
     {
     }
-
-    // security methods
 
     /**
      * @param string $role
