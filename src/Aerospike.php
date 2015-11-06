@@ -295,9 +295,22 @@ final class Aerospike
     }
 
     /**
-     * @param array $key
-     * @param array $metadata
-     * @param array $options
+     * Check if a record exists in the Aerospike database
+     *
+     * <code>
+     * $db = new Aerospike($config, true, $opts);
+     * $key = $db->initKey("test", "users", 1234);
+     * $status = $db->exists($key, $metadata);
+     *
+     * var_dump($status, $metadata);
+     * </code>
+     *
+     * @param array $key      The key under which the record can be found.
+     *                        An array with keys ['ns','set','key'] or ['ns','set','digest'].
+     * @param array $metadata Filled by an array of metadata.
+     * @param array $options  Options including
+     *                        Aerospike::OPT_READ_TIMEOUT, Aerospike::OPT_POLICY_KEY
+     *                        Aerospike::OPT_POLICY_CONSISTENCY, Aerospike::OPT_POLICY_REPLICA
      * @return int
      */
     public function exists(array $key, array &$metadata, array $options = [])
