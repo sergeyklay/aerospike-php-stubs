@@ -273,10 +273,35 @@ final class Aerospike
     }
 
     /**
-     * @param array $key
-     * @param array $bins
-     * @param int   $ttl
-     * @param array $options
+     * Writes a record to the Aerospike database.
+     *
+     * Note: Bin names cannot be longer than 14 characters.
+     *       Binary data containing the null byte (\0) may get truncated.
+     *
+     * <code>
+     * $db = new Aerospike($config);
+     *
+     * $key = $db->initKey('test', 'users', 1234);
+     *
+     * // will ensure a record exists at the given key with the specified bins
+     * $bins = ['email' => 'hey@example.com', 'name' => 'Hey There'];
+     * $status = $db->put($key, $bins);
+     *
+     * // will update the name bin, and create a new 'age' bin
+     * $bins = ['name' => 'You There', 'age' => 33];
+     * $status = $client->put($key, $bins);
+     * </code>
+     *
+     * @param array $key     The key under which to store the record.
+     *                       An array with keys ['ns', 'set', 'key'] or ['ns', 'set', 'digest'].
+     * @param array $bins    The array of bin names and values to write.
+     * @param int   $ttl     The time-to-live in seconds for the record. [Optional]
+     * @param array $options Options including
+     *                       Aerospike::OPT_SERIALIZER, Aerospike::OPT_POLICY_RETRY,
+     *                       Aerospike::OPT_READ_TIMEOUT, Aerospike::OPT_POLICY_KEY,
+     *                       Aerospike::OPT_POLICY_GEN, Aerospike::OPT_POLICY_EXISTS,
+     *                       Aerospike::OPT_POLICY_COMMIT_LEVEL [Optional]
+     *
      * @return int
      */
     public function put(array $key, array $bins, $ttl = 0, array $options = [])
@@ -284,13 +309,29 @@ final class Aerospike
     }
 
     /**
-     * @param array $key
-     * @param array $record
-     * @param array $filter
-     * @param array $options
+     * Gets a record from the Aerospike database.
+     *
+     * <code>
+     * $db = new Aerospike($config);
+     *
+     * $key = $db->initKey('test', 'users', 1234);
+     * $filter = ['email', 'manager'];
+     * $status = $db->get($key, $record);
+     *
+     * var_dump($key, $record);
+     * </code>
+     *
+     * @param array $key     The key under which the record can be found.
+     *                       An array with keys ['ns', 'set', 'key'] or ['ns', 'set', 'digest'].
+     * @param array $record  An array of key, metadata, and bins.
+     * @param array $select  An array of bin names which are the subset to be returned. [Optional]
+     * @param array $options Options including
+     *                       Aerospike::OPT_READ_TIMEOUT, Aerospike::OPT_POLICY_KEY,
+     *                       Aerospike::OPT_POLICY_CONSISTENCY, Aerospike::OPT_POLICY_REPLICA [Optional]
+     *
      * @return int
      */
-    public function get(array $key, array &$record, array $filter = [], array $options = [])
+    public function get(array $key, array &$record, array $select = [], array $options = [])
     {
     }
 
@@ -299,7 +340,7 @@ final class Aerospike
      *
      * <code>
      * $db = new Aerospike($config, true, $opts);
-     * $key = $db->initKey("test", "users", 1234);
+     * $key = $db->initKey('test', 'users', 1234);
      * $status = $db->exists($key, $metadata);
      *
      * var_dump($status, $metadata);
@@ -310,7 +351,7 @@ final class Aerospike
      * @param array $metadata Filled by an array of metadata.
      * @param array $options  Options including
      *                        Aerospike::OPT_READ_TIMEOUT, Aerospike::OPT_POLICY_KEY
-     *                        Aerospike::OPT_POLICY_CONSISTENCY, Aerospike::OPT_POLICY_REPLICA
+     *                        Aerospike::OPT_POLICY_CONSISTENCY, Aerospike::OPT_POLICY_REPLICA [Optional]
      * @return int
      */
     public function exists(array $key, array &$metadata, array $options = [])
@@ -642,8 +683,9 @@ final class Aerospike
      *
      * @param string $request  A formatted string representing a command and control operation.
      * @param string $response A formatted response from the server.
-     * @param array  $host     An array holding the cluster node connection information cluster and manage its connections to them.
-     * @param array  $options  Options including Aerospike::OPT_READ_TIMEOUT
+     * @param array  $host     An array holding the cluster node connection information cluster
+     *                         and manage its connections to them. [Optional]
+     * @param array  $options  Options including Aerospike::OPT_READ_TIMEOUT [Optional]
      *
      * @return int
      */
@@ -728,7 +770,7 @@ final class Aerospike
      *
      * @return int
      */
-    public function queryRoles(array &$roles, array $options  = [])
+    public function queryRoles(array &$roles, array $options = [])
     {
     }
 
