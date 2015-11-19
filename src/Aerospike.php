@@ -150,15 +150,33 @@ final class Aerospike
     private $error;
 
     /**
-     * @param array $config
-     * @param bool  $persistent
-     * @param array $options
+     * Constructs a new Aerospike object.
+     *
+     * <code>
+     * $config = ['hosts' => [['addr' => 'localhost', 'port' => 3000]]];
+     * $opts = [Aerospike::OPT_CONNECT_TIMEOUT => 1250, Aerospike::OPT_WRITE_TIMEOUT => 1500];
+     *
+     * $db = new Aerospike($config, true, $opts);
+     * </code>
+     *
+     * @param array $config     An associative array holding the cluster connection information.
+     * @param bool  $persistent Whether the C-client will persist between requests. [Optional]
+     * @param array $options    Options including
+     *                          Aerospike::OPT_CONNECT_TIMEOUT, Aerospike::OPT_READ_TIMEOUT
+     *                          Aerospike::OPT_WRITE_TIMEOUT, Aerospike::OPT_SERIALIZER
+     *                          Aerospike::OPT_POLICY_KEY, Aerospike::OPT_POLICY_EXISTS
+     *                          Aerospike::OPT_POLICY_RETRY, Aerospike::OPT_POLICY_COMMIT_LEVEL
+     *                          Aerospike::OPT_POLICY_CONSISTENCY, Aerospike::OPT_POLICY_REPLICA [Optional]
      */
     public function __construct(array $config, $persistent = true, array $options = [])
     {
     }
 
     /**
+     * Destructor for the Aerospike object.
+     *
+     * Aerospike::__destruct will disconnect from the Aerospike DB cluster and clean up resources.
+     *
      * @return void
      */
     public function __destruct()
@@ -166,6 +184,17 @@ final class Aerospike
     }
 
     /**
+     * Tests the connection to the Aerospike DB.
+     *
+     * <code>
+     * $db = new Aerospike($config, true, $opts);
+     *
+     * if (!$db->isConnected()) {
+     *     echo "Aerospike failed to connect[{$db->errorno()}]: {$db->error()}\n";
+     *     exit(1);
+     * }
+     * </code>
+     *
      * @return bool
      */
     public function isConnected()
@@ -173,6 +202,10 @@ final class Aerospike
     }
 
     /**
+     * Close all connections to the Aerospike DB.
+     *
+     * Aerospike::close will disconnect from the Aerospike DB cluster.
+     *
      * @return void
      */
     public function close()
@@ -232,7 +265,15 @@ final class Aerospike
     }
 
     /**
-     * @param int $logLevel
+     * Sets the logging threshold of the Aerospike object.
+     *
+     * Declares a logging threshold for the Aerospike C client.
+     *
+     * <code>
+     * one of Aerospike::LOG_LEVEL_\* values
+     * </code>
+     *
+     * @param int $logLevel One of Aerospike::LOG_LEVEL_* values
      *
      * @return void
      */
@@ -241,7 +282,43 @@ final class Aerospike
     }
 
     /**
-     * @param callable $logHandler
+     * Sets a handler for log events.
+     *
+     * The callback method must follow the signature:
+     * <code>
+     * public function log_handler (int $level, string $file, string $function, int $line)
+     * </code>
+     *
+     * Example:
+     * <code>
+     * $db = new Aerospike($config);
+     *
+     * $db->setLogLevel(Aerospike::LOG_LEVEL_DEBUG);
+     * $db->setLogHandler(function ($level, $file, $function, $line) {
+     *     switch ($level) {
+     *         case Aerospike::LOG_LEVEL_ERROR:
+     *             $lvl_str = 'ERROR';
+     *             break;
+     *         case Aerospike::LOG_LEVEL_WARN:
+     *             $lvl_str = 'ERROR';
+     *             break;
+     *         case Aerospike::LOG_LEVEL_INFO:
+     *             $lvl_str = 'ERROR';
+     *             break;
+     *         case Aerospike::LOG_LEVEL_DEBUG:
+     *             $lvl_str = 'ERROR';
+     *             break;
+     *         case Aerospike::LOG_LEVEL_TRACE:
+     *             $lvl_str = 'ERROR';
+     *             break;
+     *         default:
+     *             $lvl_str = '???';
+     *     }
+     *     error_log("[$lvl_str] in $function at $file:$line");
+     * });
+     * </code>
+     *
+     * @param callable $logHandler A callback function invoked for each logging event above the threshold.
      *
      * @return void
      */
@@ -250,10 +327,20 @@ final class Aerospike
     }
 
     /**
-     * @param string     $ns
-     * @param string     $set
-     * @param int|string $pk
-     * @param bool       $isDigest
+     * Helper method for building the key array.
+     *
+     * <code>
+     * $db = new Aerospike($config);
+     *
+     * $key = $db->initKey('test', 'users', 1234);
+     *
+     * var_dump($key);
+     * </code>
+     *
+     * @param string     $ns       The namespace.
+     * @param string     $set      The name of the set within the namespace.
+     * @param int|string $pk       The primary key or digest value that identifies the record.
+     * @param bool       $isDigest True if the pk argument is a digest, false if it is a key [Optional]
      *
      * @return array
      */
@@ -262,9 +349,20 @@ final class Aerospike
     }
 
     /**
-     * @param string     $ns
-     * @param string     $set
-     * @param int|string $pk
+     * Helper method for building the key array.
+     *
+     * <code>
+     * $db = new Aerospike($config);
+     *
+     * $digest = $db->getKeyDigest('test', 'users', 1);
+     * $key = $db->initKey('test', 'users', $digest, true);
+     *
+     * var_dump($digest, $key);
+     * </code>
+     *
+     * @param string     $ns  The namespace.
+     * @param string     $set The name of the set within the namespace.
+     * @param int|string $pk  The primary key that identifies the record in the application.
      *
      * @return string
      */
@@ -296,7 +394,7 @@ final class Aerospike
      *                       An array with keys ['ns', 'set', 'key'] or ['ns', 'set', 'digest'].
      * @param array $bins    The array of bin names and values to write.
      * @param int   $ttl     The time-to-live in seconds for the record. [Optional]
-     * @param array $options Options including
+     * @param array $options Options including:
      *                       Aerospike::OPT_SERIALIZER, Aerospike::OPT_POLICY_RETRY,
      *                       Aerospike::OPT_READ_TIMEOUT, Aerospike::OPT_POLICY_KEY,
      *                       Aerospike::OPT_POLICY_GEN, Aerospike::OPT_POLICY_EXISTS,
@@ -325,7 +423,7 @@ final class Aerospike
      *                       An array with keys ['ns', 'set', 'key'] or ['ns', 'set', 'digest'].
      * @param array $record  An array of key, metadata, and bins.
      * @param array $select  An array of bin names which are the subset to be returned. [Optional]
-     * @param array $options Options including
+     * @param array $options Options including:
      *                       Aerospike::OPT_READ_TIMEOUT, Aerospike::OPT_POLICY_KEY,
      *                       Aerospike::OPT_POLICY_CONSISTENCY, Aerospike::OPT_POLICY_REPLICA [Optional]
      *
@@ -349,7 +447,7 @@ final class Aerospike
      * @param array $key      The key under which the record can be found.
      *                        An array with keys ['ns','set','key'] or ['ns','set','digest'].
      * @param array $metadata Filled by an array of metadata.
-     * @param array $options  Options including
+     * @param array $options  Options including:
      *                        Aerospike::OPT_READ_TIMEOUT, Aerospike::OPT_POLICY_KEY
      *                        Aerospike::OPT_POLICY_CONSISTENCY, Aerospike::OPT_POLICY_REPLICA [Optional]
      * @return int
