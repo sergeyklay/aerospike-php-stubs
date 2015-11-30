@@ -40,10 +40,13 @@ final class Aerospike
     const POLICY_CONSISTENCY_ALL = 1;
     const POLICY_COMMIT_LEVEL_MASTER = 1;
     const POLICY_COMMIT_LEVEL_ALL = 0;
+
+    // Query Predicate Operators
     const OP_RANGE = 'RANGE';
     const OP_EQ = '=';
     const OP_CONTAINS = 'CONTAINS';
     const OP_BETWEEN = 'BETWEEN';
+
     const OPT_WRITE_TIMEOUT = 3;
     const OPT_TTL = 16;
     const OPT_SERIALIZER = 6;
@@ -414,7 +417,7 @@ final class Aerospike
      *
      * $key = $db->initKey('test', 'users', 1234);
      * $filter = ['email', 'manager'];
-     * $status = $db->get($key, $record);
+     * $status = $db->get($key, $record, $filter);
      *
      * var_dump($key, $record);
      * </code>
@@ -468,8 +471,22 @@ final class Aerospike
     }
 
     /**
-     * @param array $key
-     * @param array $options
+     * Removes a record from the Aerospike database.
+     *
+     * <code>
+     * $db = new Aerospike($config);
+     * $key = $db->initKey('test', 'users', 1234);
+     *
+     * $status = $db->remove($key, [Aerospike::OPT_POLICY_RETRY => Aerospike::POLICY_RETRY_NONE]);
+     *
+     * var_dump($status);
+     * </code>
+     *
+     * @param array $key     The key for the record. An array with keys ['ns','set','key'] or ['ns','set','digest'].
+     * @param array $options Options including:
+     *                       Aerospike::OPT_WRITE_TIMEOUT, Aerospike::OPT_POLICY_RETRY
+     *                       Aerospike::OPT_POLICY_KEY, Aerospike::OPT_POLICY_GEN,
+     *                       Aerospike::OPT_POLICY_COMMIT_LEVEL [Optional]
      *
      * @return int
      */
