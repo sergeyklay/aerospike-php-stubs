@@ -460,9 +460,27 @@ final class Aerospike
     }
 
     /**
-     * @param array $key
-     * @param int   $ttl
-     * @param array $options
+     * Touch a record in the Aerospike DB.
+     *
+     * Will touch the given record, resetting its time-to-live and incrementing its generation.
+     *
+     * <code>
+     * $db = new Aerospike($config);
+     * $key = $db->initKey('test', 'users', 1234);
+     *
+     * // Added 120 seconds to the record's expiration.
+     * $status = $db->touch($key, 120);
+     *
+     * var_dump($status);
+     * </code>
+     *
+     * @param array $key     The key for the record. An array with keys ['ns','set','key'] or ['ns','set','digest'].
+     * @param int   $ttl     The time-to-live in seconds for the record. [Optional]
+     * @param array $options Options including:
+     *                       Aerospike::OPT_WRITE_TIMEOUT, Aerospike::OPT_POLICY_RETRY
+     *                       Aerospike::OPT_POLICY_KEY, Aerospike::OPT_POLICY_GEN,
+     *                       Aerospike::OPT_POLICY_REPLICA, Aerospike::OPT_POLICY_CONSISTENCY,
+     *                       Aerospike::OPT_POLICY_COMMIT_LEVEL [Optional]
      *
      * @return int
      */
