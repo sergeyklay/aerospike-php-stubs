@@ -722,15 +722,35 @@ final class Aerospike
     }
 
     /**
-     * @param string   $ns
-     * @param string   $set
-     * @param callable $record
-     * @param array    $select
-     * @param array    $options
+     * Scans a set in the Aerospike database.
+     *
+     * <code>
+     * $db = new Aerospike($config);
+     * $options = [Aerospike::OPT_SCAN_PRIORITY => Aerospike::SCAN_PRIORITY_MEDIUM];
+     * $processed = 0;
+     *
+     * $status = $db->scan('test', 'users', function ($record) use (&$processed) {
+     *     if (!is_null($record['bins']['email'])) echo $record['bins']['email']."\n";
+     *     if ($processed++ > 19) return false; // halt the stream by returning a false
+     * }, array("email"), $options);
+     *
+     * var_dump($status, $processed);
+     * </code>
+     *
+     * @param string   $ns The namespace
+     * @param string   $set The set to be scanned
+     * @param callable $recordCallback A callback function invoked for each record streaming back from the server
+     * @param array    $select An array of bin names which are the subset to be returned
+     * @param array    $options Options including:
+     *                          Aerospike::OPT_READ_TIMEOUT
+     *                          Aerospike::OPT_SCAN_PRIORITY
+     *                          Aerospike::OPT_SCAN_PERCENTAGE - of the records in the set to return
+     *                          Aerospike::OPT_SCAN_CONCURRENTLY - whether to run the scan in parallel
+     *                          Aerospike::OPT_SCAN_NOBINS whether to not retrieve bins for the records
      *
      * @return int
      */
-    public function scan($ns, $set, $record, array $select = [], array $options = [])
+    public function scan($ns, $set, $recordCallback, array $select = [], array $options = [])
     {
     }
 
