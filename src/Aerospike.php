@@ -2,127 +2,71 @@
 
 final class Aerospike
 {
-    /**
-     * Batch-direct or batch-index protocol. default: 0
-     * @type int
-     */
-    const USE_BATCH_DIRECT = 17;
+    // Options can be assigned values that modify default behavior
+    const OPT_CONNECT_TIMEOUT     = 1;  // value in milliseconds, default: 1000
+    const OPT_READ_TIMEOUT        = 2;  // value in milliseconds, default: 1000
+    const OPT_WRITE_TIMEOUT       = 3;  // value in milliseconds, default: 1000
+    const OPT_POLICY_RETRY        = 4;  // set to a Aerospike::POLICY_RETRY_* value
+    const OPT_POLICY_EXISTS       = 5;  // set to a Aerospike::POLICY_EXISTS_* value
+    const OPT_SERIALIZER          = 6;  // set the unsupported type handler
+    const OPT_SCAN_PRIORITY       = 7;  // set to a Aerospike::SCAN_PRIORITY_* value
+    const OPT_SCAN_PERCENTAGE     = 8;  // integer value 1-100, default: 100
+    const OPT_SCAN_CONCURRENTLY   = 9;  // boolean value, default: false
+    const OPT_SCAN_NOBINS         = 10; // boolean value, default: false
+    const OPT_POLICY_KEY          = 11; // records store the digest unique ID, optionally also its (ns,set,key) inputs
+    const OPT_POLICY_GEN          = 12; // set to [Aerospike::POLICY_GEN_* [, $gen_value ]]
+    const OPT_POLICY_REPLICA      = 13; // set to one of Aerospike::POLICY_REPLICA_*
+    const OPT_POLICY_CONSISTENCY  = 14; // set to one of Aerospike::POLICY_CONSISTENCY_*
+    const OPT_POLICY_COMMIT_LEVEL = 15; // set to one of Aerospike::POLICY_COMMIT_LEVEL_*
+    const OPT_TTL                 = 16; // record ttl, value in seconds
+    const USE_BATCH_DIRECT        = 17; // batch-direct or batch-index protocol. default: 0
 
-    /**
-     * UDF Lua type
-     * @type int
-     */
-    const UDF_TYPE_LUA = 0;
+    // UDF types
+    const UDF_TYPE_LU = 0;
 
-    /**
-     * @type int
-     */
+    // Determines a handler for writing values of unsupported type into bins
+    // Set OPT_SERIALIZER to one of the following:
+    const SERIALIZER_NONE = 0;
+    const SERIALIZER_PHP  = 1; // default handler
+    const SERIALIZER_JSON = 2;
     const SERIALIZER_USER = 3;
 
-    /**
-     * @type int
-     */
-    const SERIALIZER_PHP = 1;
+    // Status values returned by scanInfo()
+    const SCAN_STATUS_UNDEF      = 0; // Scan status is undefined
+    const SCAN_STATUS_INPROGRESS = 1; // Scan is currently running
+    const SCAN_STATUS_COMPLETED  = 3; // Scan was aborted due to failure or the user
+    const SCAN_STATUS_ABORTED    = 2; // Scan completed successfully
 
-    /**
-     * @type int
-     */
-    const SERIALIZER_NONE = 0;
-
-    /**
-     * @type int
-     */
-    const SERIALIZER_JSON = 2;
-
-    /**
-     * @type int
-     */
-    const SCAN_STATUS_UNDEF = 0;
-
-    /**
-     * @type int
-     */
-    const SCAN_STATUS_INPROGRESS = 1;
-
-    /**
-     * @type int
-     */
-    const SCAN_STATUS_COMPLETED = 3;
-
-    /**
-     * @type int
-     */
-    const SCAN_STATUS_ABORTED = 2;
-
-    /**
-     * @type int
-     */
-    const SCAN_PRORITY_LOW = 1;
-
-    /**
-     * @type int
-     */
+    // Scan priority
+    const SCAN_PRIORITY_AUTO   = 0;
+    const SCAN_PRORITY_LOW     = 1;
     const SCAN_PRIORITY_MEDIUM = 2;
+    const SCAN_PRIORITY_HIGH   = 3;
 
-    /**
-     * @type int
-     */
-    const SCAN_PRIORITY_HIGH = 3;
+    // Security role privileges
+    const PRIV_USER_ADMIN     = 0;  // user can edit/remove other users
+    const PRIV_SYS_ADMIN      = 1;  // can perform sysadmin functions that do not involve user admin
+    const PRIV_DATA_ADMIN     = 2;  // can perform data admin functions that do not involve user admin
+    const PRIV_READ           = 10; // user can read data only
+    const PRIV_READ_WRITE_UDF = 12; // can read and write data through User-Defined Functions
 
-    /**
-     * @type int
-     */
-    const SCAN_PRIORITY_AUTO = 0;
+    // The retry policy can be determined by setting OPT_POLICY_RETRY to one of
+    const POLICY_RETRY_NONE = 0; // do not retry an operation (default)
+    const POLICY_RETRY_ONCE = 1; // allow for a single retry on an operation
 
-    /**
-     * @type int
-     */
-    const PRIV_USER_ADMIN = 0;
-
-    /**
-     * @type int
-     */
-    const PRIV_SYS_ADMIN = 1;
-
-    /**
-     * @type int
-     */
-    const PRIV_READ_WRITE_UDF = 12;
+    // Replica and consistency guarantee options
+    // See: http://www.aerospike.com/docs/client/c/usage/consistency.html
+    const POLICY_REPLICA_MASTER      = 0; // read from the partition master replica node (default)
+    const POLICY_REPLICA_ANY         = 1; // read from either the master or prole node
+    const POLICY_CONSISTENCY_ONE     = 0; // involve a single replica in the read operation (default)
+    const POLICY_CONSISTENCY_ALL     = 1; // involve all replicas in the read operation
+    const POLICY_COMMIT_LEVEL_ALL    = 0; // return success after committing all replicas (default)
+    const POLICY_COMMIT_LEVEL_MASTER = 1; // return success after committing the master replica
 
     /**
      * @type int
      */
     const PRIV_READ_WRITE = 11;
-
-    /**
-     * @type int
-     */
-    const PRIV_READ = 10;
-
-    /**
-     * @type int
-     */
-    const PRIV_DATA_ADMIN = 2;
-
-    /**
-     * @type int
-     */
-    const POLICY_RETRY_ONCE = 1;
-
-    /**
-     * @type int
-     */
-    const POLICY_RETRY_NONE = 0;
-
-    /**
-     * @type int
-     */
-    const POLICY_REPLICA_MASTER = 0;
-
-    /**
-     * @type int
-     */
-    const POLICY_REPLICA_ANY = 1;
 
     /**
      * @type int
@@ -175,111 +119,11 @@ final class Aerospike
      */
     const POLICY_EXISTS_CREATE = 1;
 
-    /**
-     * @type int
-     */
-    const POLICY_CONSISTENCY_ONE = 0;
-
-    /**
-     * @type int
-     */
-    const POLICY_CONSISTENCY_ALL = 1;
-
-    /**
-     * @type int
-     */
-    const POLICY_COMMIT_LEVEL_MASTER = 1;
-
-    /**
-     * @type int
-     */
-    const POLICY_COMMIT_LEVEL_ALL = 0;
-
     // Query Predicate Operators
     const OP_RANGE = 'RANGE';
     const OP_EQ = '=';
     const OP_CONTAINS = 'CONTAINS';
     const OP_BETWEEN = 'BETWEEN';
-
-    /**
-     * @type int
-     */
-    const OPT_WRITE_TIMEOUT = 3;
-
-    /**
-     * @type int
-     */
-    const OPT_TTL = 16;
-
-    /**
-     * @type int
-     */
-    const OPT_SERIALIZER = 6;
-
-    /**
-     * @type int
-     */
-    const OPT_SCAN_PRIORITY = 7;
-
-    /**
-     * @type int
-     */
-    const OPT_SCAN_PERCENTAGE = 8;
-
-    /**
-     * @type int
-     */
-    const OPT_SCAN_NOBINS = 10;
-
-    /**
-     * @type int
-     */
-    const OPT_SCAN_CONCURRENTLY = 9;
-
-    /**
-     * @type int
-     */
-    const OPT_READ_TIMEOUT = 2;
-
-    /**
-     * @type int
-     */
-    const OPT_POLICY_RETRY = 4;
-
-    /**
-     * @type int
-     */
-    const OPT_POLICY_REPLICA = 13;
-
-    /**
-     * @type int
-     */
-    const OPT_POLICY_KEY = 11;
-
-    /**
-     * @type int
-     */
-    const OPT_POLICY_GEN = 12;
-
-    /**
-     * @type int
-     */
-    const OPT_POLICY_EXISTS = 5;
-
-    /**
-     * @type int
-     */
-    const OPT_POLICY_CONSISTENCY = 14;
-
-    /**
-     * @type int
-     */
-    const OPT_POLICY_COMMIT_LEVEL = 15;
-
-    /**
-     * @type int
-     */
-    const OPT_CONNECT_TIMEOUT = 1;
 
     /**
      * @type int
