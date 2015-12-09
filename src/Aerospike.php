@@ -63,457 +63,124 @@ final class Aerospike
     const POLICY_COMMIT_LEVEL_ALL    = 0; // return success after committing all replicas (default)
     const POLICY_COMMIT_LEVEL_MASTER = 1; // return success after committing the master replica
 
-    /**
-     * @type int
-     */
-    const PRIV_READ_WRITE = 11;
+    // Roles and privileges
+    const PRIV_READ_WRITE = 11; // The ability to read and write data
 
-    /**
-     * @type int
-     */
-    const POLICY_KEY_SEND = 1;
+    // The key policy can be determined by setting OPT_POLICY_KEY to one of
+    const POLICY_KEY_DIGEST = 0; // hashes (ns,set,key) data into a unique record ID (default)
+    const POLICY_KEY_SEND   = 1; // also send, store, and get the actual (ns,set,key) with each record
 
-    /**
-     * Hashes (ns,set,key) data into a unique record ID (default)
-     * @type int
-     */
-    const POLICY_KEY_DIGEST = 0;
+    // The generation policy can be set using OPT_POLICY_GEN to one of
+    const POLICY_GEN_IGNORE = 0; // write a record, regardless of generation
+    const POLICY_GEN_EQ     = 1; // write a record, ONLY if given value is equal to the current record generation
+    const POLICY_GEN_GT     = 2; // write a record, ONLY if given value is greater-than the current record generation
 
-    /**
-     * @type int
-     */
-    const POLICY_GEN_IGNORE = 0;
-
-    /**
-     * @type int
-     */
-    const POLICY_GEN_GT = 2;
-
-    /**
-     * @type int
-     */
-    const POLICY_GEN_EQ = 1;
-
-    /**
-     * @type int
-     */
-    const POLICY_EXISTS_UPDATE = 2;
-
-    /**
-     * @type int
-     */
-    const POLICY_EXISTS_REPLACE = 3;
-
-    /**
-     * @type int
-     */
-    const POLICY_EXISTS_IGNORE = 0;
-
-    /**
-     * @type int
-     */
-    const POLICY_EXISTS_CREATE_OR_REPLACE = 4;
-
-    /**
-     * @type int
-     */
-    const POLICY_EXISTS_CREATE = 1;
+    // By default writes will try to create or replace records and bins
+    // behaving similar to an array in PHP. Setting
+    // OPT_POLICY_EXISTS with one of these values will overwrite this.
+    // POLICY_EXISTS_IGNORE (aka CREATE_OR_UPDATE) is the default value
+    const POLICY_EXISTS_IGNORE            = 0; // interleave bins of a record if it exists
+    const POLICY_EXISTS_CREATE            = 1; // create a record ONLY if it DOES NOT exist
+    const POLICY_EXISTS_UPDATE            = 2; // update a record ONLY if it exists
+    const POLICY_EXISTS_REPLACE           = 3; // replace a record ONLY if it exists
+    const POLICY_EXISTS_CREATE_OR_REPLACE = 4; // overwrite the bins if record exists
 
     // Query Predicate Operators
-    const OP_RANGE = 'RANGE';
-    const OP_EQ = '=';
+    const OP_RANGE    = 'RANGE';
+    const OP_EQ       = '=';
     const OP_CONTAINS = 'CONTAINS';
-    const OP_BETWEEN = 'BETWEEN';
+    const OP_BETWEEN  = 'BETWEEN';
 
-    /**
-     * @type int
-     */
-    const OPERATOR_WRITE = 2;
-
-    /**
-     * @type int
-     */
-    const OPERATOR_TOUCH = 11;
-
-    /**
-     * @type int
-     */
-    const OPERATOR_READ = 1;
-
-    /**
-     * @type int
-     */
+    // Multi-operation operators map to the C client
+    const OPERATOR_READ    = 1;
+    const OPERATOR_WRITE   = 2;
+    const OPERATOR_INCR    = 5;
+    const OPERATOR_APPEND  = 9;
     const OPERATOR_PREPEND = 10;
+    const OPERATOR_TOUCH   = 11;
 
-    /**
-     * @type int
-     */
-    const OPERATOR_INCR = 5;
-
-    /**
-     * @type int
-     */
-    const OPERATOR_APPEND = 9;
-
-    /**
-     * @type int
-     */
-    const OK = 0;
-
-    /**
-     * @type int
-     */
-    const LOG_LEVEL_WARN = 4;
-
-    /**
-     * @type int
-     */
+    // Logger
     const LOG_LEVEL_TRACE = 1;
-
-    /**
-     * @type int
-     */
-    const LOG_LEVEL_OFF = 6;
-
-    /**
-     * @type int
-     */
-    const LOG_LEVEL_INFO = 3;
-
-    /**
-     * @type int
-     */
-    const LOG_LEVEL_ERROR = 5;
-
-    /**
-     * @type int
-     */
     const LOG_LEVEL_DEBUG = 2;
+    const LOG_LEVEL_INFO  = 3;
+    const LOG_LEVEL_WARN  = 4;
+    const LOG_LEVEL_ERROR = 5;
+    const LOG_LEVEL_OFF   = 6;
 
-    /**
-     * @type int
-     */
-    const INDEX_TYPE_STRING = 0;
-
-    /**
-     * @type int
-     */
-    const INDEX_TYPE_MAPVALUES = 3;
-
-    /**
-     * @type int
-     */
-    const INDEX_TYPE_MAPKEYS = 2;
-
-    /**
-     * @type int
-     */
-    const INDEX_TYPE_LIST = 1;
-
-    /**
-     * @type int
-     */
-    const INDEX_TYPE_INTEGER = 1;
-
-    /**
-     * @type int
-     */
-    const INDEX_TYPE_DEFAULT = 0;
-
-    /**
-     * @type int
-     */
-    const INDEX_STRING = 0;
-
-    /**
-     * @type int
-     */
-    const INDEX_NUMERIC = 1;
-
-    /**
-     * @type int
-     */
-    const ERR_USER_ALREADY_EXISTS = 61;
-
-    /**
-     * @type int
-     */
-    const ERR_UNSUPPORTED_FEATURE = 16;
-
-    /**
-     * @type int
-     */
-    const ERR_UDF_NOT_FOUND = 1301;
-
-    /**
-     * @type int
-     */
-    const ERR_UDF = 100;
-
-    /**
-     * @type int
-     */
-    const ERR_TIMEOUT = 9;
-
-    /**
-     * @type int
-     */
-    const ERR_SERVER_FULL = 8;
-
-    /**
-     * @type int
-     */
-    const ERR_SERVER = 1;
-
-    /**
-     * @type int
-     */
+    // Server status codes
+    const OK                                = 0;    // Success status
+    const ERR_SERVER                        = 1;    // Generic server error
+    const ERR_RECORD_NOT_FOUND              = 2;
+    const ERR_RECORD_GENERATION             = 3;    // Write policy regarding generation violated
+    const ERR_REQUEST_INVALID               = 4;    // Invalid request protocol or protocol field
+    const ERR_RECORD_EXISTS                 = 5;    // Record already exists
+    const ERR_BIN_EXISTS                    = 6;    // Bin already exists
+    const ERR_CLUSTER_CHANGE                = 7;    // Cluster state changed during the request
+    const ERR_SERVER_FULL                   = 8;    // Node running out of memory/storage
+    const ERR_TIMEOUT                       = 9;    // Client or server side timeout error
+    const ERR_NO_XDR                        = 10;   // XDR not available for the cluster
+    const ERR_CLUSTER                       = 11;   // Generic cluster discovery and connection error
+    const ERR_RECORD_TOO_BIG                = 13;   // Record written cannot fit in storage write block
+    const ERR_BIN_INCOMPATIBLE_TYPE         = 12;
+    const ERR_RECORD_BUSY                   = 14;   // Hot key: too many concurrent requests for the record
+    const ERR_SCAN_ABORTED                  = 15;   // Scan aborted by the user
+    const ERR_UNSUPPORTED_FEATURE           = 16;
+    const ERR_BIN_NOT_FOUND                 = 17;
+    const ERR_DEVICE_OVERLOAD               = 18;   // Node storage lagging write load
+    const ERR_RECORD_KEY_MISMATCH           = 19;   // Digest incompatibility?
+    const ERR_NAMESPACE_NOT_FOUND           = 20;
+    const ERR_BIN_NAME                      = 21;   // Name too long or exceeds the unique name quota for the namespace
+    const ERR_QUERY_END                     = 50;   // Out of records to query
+    const ERR_SECURITY_NOT_SUPPORTED        = 51;
+    const ERR_SECURITY_NOT_ENABLED          = 52;
     const ERR_SECURITY_SCHEME_NOT_SUPPORTED = 53;
+    const ERR_INVALID_COMMAND               = 54;
+    const ERR_INVALID_FIELD                 = 55;
+    const ERR_ILLEGAL_STATE                 = 56;
+    const ERR_INVALID_USER                  = 60;
+    const ERR_USER_ALREADY_EXISTS           = 61;
+    const ERR_INVALID_PASSWORD              = 62;
+    const ERR_EXPIRED_PASSWORD              = 63;
+    const ERR_FORBIDDEN_PASSWORD            = 64;
+    const ERR_INVALID_CREDENTIAL            = 65;
+    const ERR_INVALID_ROLE                  = 70;
+    const ERR_ROLE_ALREADY_EXISTS           = 71;
+    const ERR_INVALID_PRIVILEGE             = 72;
+    const ERR_NOT_AUTHENTICATED             = 80;
+    const ERR_ROLE_VIOLATION                = 81;
+    const ERR_UDF                           = 100;  // Generic UDF error
+    const ERR_LARGE_ITEM_NOT_FOUND          = 125;
+    const ERR_INDEX_FOUND                   = 200;
+    const ERR_INDEX_NOT_FOUND               = 201;
+    const ERR_INDEX_OOM                     = 202;  // Index out of memory
+    const ERR_INDEX_NOT_READABLE            = 203;
+    const ERR_INDEX                         = 204;  // Generic secondary index error
+    const ERR_INDEX_NAME_MAXLEN             = 205;
+    const ERR_INDEX_MAXCOUNT                = 206;  // Max number of indexes reached
+    const ERR_QUERY_ABORTED                 = 210;  // Query aborted by the user
+    const ERR_QUERY_QUEUE_FULL              = 211;
+    const ERR_QUERY_TIMEOUT                 = 212;
+    const ERR_QUERY                         = 213;  // Generic query error
+    const ERR_UDF_NOT_FOUND                 = 1301; // UDF does not exist
+    const ERR_LUA_FILE_NOT_FOUND            = 1302; // Source file for the module not found
 
-    /**
-     * @type int
-     */
-    const ERR_SECURITY_NOT_SUPPORTED = 51;
-
-    /**
-     * @type int
-     */
-    const ERR_SECURITY_NOT_ENABLED = 52;
-
-    /**
-     * @type int
-     */
-    const ERR_SCAN_ABORTED = 15;
-
-    /**
-     * @type int
-     */
-    const ERR_ROLE_VIOLATION = 81;
-
-    /**
-     * @type int
-     */
-    const ERR_ROLE_ALREADY_EXISTS = 71;
-
-    /**
-     * @type int
-     */
-    const ERR_REQUEST_INVALID = 4;
-
-    /**
-     * @type int
-     */
-    const ERR_RECORD_TOO_BIG = 13;
-
-    /**
-     * @type int
-     */
-    const ERR_RECORD_NOT_FOUND = 2;
-
-    /**
-     * @type int
-     */
-    const ERR_RECORD_KEY_MISMATCH = 19;
-
-    /**
-     * @type int
-     */
-    const ERR_RECORD_GENERATION = 3;
-
-    /**
-     * @type int
-     */
-    const ERR_RECORD_EXISTS = 5;
-
-    /**
-     * @type int
-     */
-    const ERR_RECORD_BUSY = 14;
-
-    /**
-     * @type int
-     */
-    const ERR_QUERY_TIMEOUT = 212;
-
-    /**
-     * @type int
-     */
-    const ERR_QUERY_QUEUE_FULL = 211;
-
-    /**
-     * @type int
-     */
-    const ERR_QUERY_END = 50;
-
-    /**
-     * @type int
-     */
-    const ERR_QUERY_ABORTED = 210;
-
-    /**
-     * @type int
-     */
-    const ERR_QUERY = 213;
-
-    /**
-     * @type int
-     */
-    const ERR_PARAM = -2;
-
-    /**
-     * @type int
-     */
-    const ERR_NO_XDR = 10;
-
-    /**
-     * @type int
-     */
-    const ERR_NOT_AUTHENTICATED = 80;
-
-    /**
-     * @type int
-     */
-    const ERR_NAMESPACE_NOT_FOUND = 20;
-
-    /**
-     * @type int
-     */
-    const ERR_LUA_FILE_NOT_FOUND = 1302;
-
-    /**
-     * @type int
-     */
-    const ERR_LARGE_ITEM_NOT_FOUND = 125;
-
-    /**
-     * @type int
-     */
-    const ERR_INVALID_USER = 60;
-
-    /**
-     * @type int
-     */
-    const ERR_INVALID_ROLE = 70;
-
-    /**
-     * @type int
-     */
-    const ERR_INVALID_PRIVILEGE = 72;
-
-    /**
-     * @type int
-     */
-    const ERR_INVALID_PASSWORD = 62;
-
-    /**
-     * @type int
-     */
+    // Client status codes
+    const ERR_CLIENT       = -1; // Generic client error
+    const ERR_PARAM        = -2; // Invalid client parameter
     const ERR_INVALID_HOST = -4;
 
-    /**
-     * @type int
-     */
-    const ERR_INVALID_FIELD = 55;
+    // Index types
+    const INDEX_TYPE_DEFAULT   = 0;
+    const INDEX_TYPE_LIST      = 1; // index records where the bin contains a list
+    const INDEX_TYPE_MAPKEYS   = 2; // index the keys of records whose specified bin is a map
+    const INDEX_TYPE_MAPVALUES = 3; // index the values of records whose specified bin is a map
 
-    /**
-     * @type int
-     */
-    const ERR_INVALID_CREDENTIAL = 65;
+    // Data type
+    const INDEX_STRING  = 0; // if the index type is matched, regard values of type string
+    const INDEX_NUMERIC = 1; // if the index type is matched, regard values of type integer
 
-    /**
-     * @type int
-     */
-    const ERR_INVALID_COMMAND = 54;
-
-    /**
-     * @type int
-     */
-    const ERR_INDEX_OOM = 202;
-
-    /**
-     * @type int
-     */
-    const ERR_INDEX_NOT_READABLE = 203;
-
-    /**
-     * @type int
-     */
-    const ERR_INDEX_NOT_FOUND = 201;
-
-    /**
-     * @type int
-     */
-    const ERR_INDEX_NAME_MAXLEN = 205;
-
-    /**
-     * @type int
-     */
-    const ERR_INDEX_MAXCOUNT = 206;
-
-    /**
-     * @type int
-     */
-    const ERR_INDEX_FOUND = 200;
-
-    /**
-     * @type int
-     */
-    const ERR_INDEX = 204;
-
-    /**
-     * @type int
-     */
-    const ERR_ILLEGAL_STATE = 56;
-
-    /**
-     * @type int
-     */
-    const ERR_FORBIDDEN_PASSWORD = 64;
-
-    /**
-     * @type int
-     */
-    const ERR_EXPIRED_PASSWORD = 63;
-
-    /**
-     * @type int
-     */
-    const ERR_DEVICE_OVERLOAD = 18;
-
-    /**
-     * @type int
-     */
-    const ERR_CLUSTER_CHANGE = 7;
-
-    /**
-     * @type int
-     */
-    const ERR_CLUSTER = 11;
-
-    /**
-     * @type int
-     */
-    const ERR_CLIENT = -1;
-
-    /**
-     * @type int
-     */
-    const ERR_BIN_NOT_FOUND = 17;
-
-    /**
-     * @type int
-     */
-    const ERR_BIN_NAME = 21;
-
-    /**
-     * @type int
-     */
-    const ERR_BIN_INCOMPATIBLE_TYPE = 12;
-
-    /**
-     * @type int
-     */
-    const ERR_BIN_EXISTS = 6;
+    const INDEX_TYPE_STRING  = 0;
+    const INDEX_TYPE_INTEGER = 1;
 
     /**
      * @var int
