@@ -3,39 +3,63 @@
 final class Aerospike
 {
     // Options can be assigned values that modify default behavior
-    const OPT_CONNECT_TIMEOUT     = 1;  // value in milliseconds, default: 1000
-    const OPT_READ_TIMEOUT        = 2;  // value in milliseconds, default: 1000
-    const OPT_WRITE_TIMEOUT       = 3;  // value in milliseconds, default: 1000
+    const OPT_CONNECT_TIMEOUT     = 1;  // value in milliseconds (default: 1000)
+    const OPT_READ_TIMEOUT        = 2;  // value in milliseconds (default: 1000)
+    const OPT_WRITE_TIMEOUT       = 3;  // value in milliseconds (default: 1000)
     const OPT_POLICY_RETRY        = 4;  // set to a Aerospike::POLICY_RETRY_* value
     const OPT_POLICY_EXISTS       = 5;  // set to a Aerospike::POLICY_EXISTS_* value
     const OPT_SERIALIZER          = 6;  // set the unsupported type handler
     const OPT_SCAN_PRIORITY       = 7;  // set to a Aerospike::SCAN_PRIORITY_* value
-    const OPT_SCAN_PERCENTAGE     = 8;  // integer value 1-100, default: 100
-    const OPT_SCAN_CONCURRENTLY   = 9;  // boolean value, default: false
-    const OPT_SCAN_NOBINS         = 10; // boolean value, default: false
+    const OPT_SCAN_PERCENTAGE     = 8;  // integer value 1-100 (default: 100)
+    const OPT_SCAN_CONCURRENTLY   = 9;  // boolean value (default: false)
+    const OPT_SCAN_NOBINS         = 10; // boolean value (default: false)
     const OPT_POLICY_KEY          = 11; // records store the digest unique ID, optionally also its (ns,set,key) inputs
     const OPT_POLICY_GEN          = 12; // set to [Aerospike::POLICY_GEN_* [, $gen_value ]]
     const OPT_POLICY_REPLICA      = 13; // set to one of Aerospike::POLICY_REPLICA_*
     const OPT_POLICY_CONSISTENCY  = 14; // set to one of Aerospike::POLICY_CONSISTENCY_*
     const OPT_POLICY_COMMIT_LEVEL = 15; // set to one of Aerospike::POLICY_COMMIT_LEVEL_*
     const OPT_TTL                 = 16; // record ttl, value in seconds
-    const USE_BATCH_DIRECT        = 17; // batch-direct or batch-index protocol. default: 0
+    const USE_BATCH_DIRECT        = 17; // batch-direct or batch-index protocol (default: 0)
 
     // UDF types
     const UDF_TYPE_LU = 0;
 
     // Determines a handler for writing values of unsupported type into bins
     // Set OPT_SERIALIZER to one of the following:
-    const SERIALIZER_NONE = 0;
-    const SERIALIZER_PHP  = 1; // default handler
+    const SERIALIZER_NONE = 0; // throw an error when serialization is required
+    const SERIALIZER_PHP  = 1; // use the PHP serialize/unserialize functions (default)
     const SERIALIZER_JSON = 2;
-    const SERIALIZER_USER = 3;
+    const SERIALIZER_USER = 3; // use a user-defined serializer
 
-    // Status values returned by scanInfo()
-    const SCAN_STATUS_UNDEF      = 0; // Scan status is undefined
-    const SCAN_STATUS_INPROGRESS = 1; // Scan is currently running
-    const SCAN_STATUS_COMPLETED  = 3; // Scan was aborted due to failure or the user
-    const SCAN_STATUS_ABORTED    = 2; // Scan completed successfully
+    // Status values returned by scanInfo(). Deprecated in favor of jobInfo()
+
+    /**
+     * Scan status is undefined
+     * @deprecated
+     * @type int
+     */
+    const SCAN_STATUS_UNDEF = 0;
+
+    /**
+     * Scan is currently running
+     * @deprecated
+     * @type int
+     */
+    const SCAN_STATUS_INPROGRESS = 1;
+
+    /**
+     * Scan completed successfully
+     * @deprecated
+     * @type int
+     */
+    const SCAN_STATUS_ABORTED = 2;
+
+    /**
+     * Scan was aborted due to failure or the user
+     * @deprecated
+     * @type int
+     */
+    const SCAN_STATUS_COMPLETED = 3;
 
     // Scan priority
     const SCAN_PRIORITY_AUTO   = 0;
@@ -71,7 +95,7 @@ final class Aerospike
     const POLICY_KEY_SEND   = 1; // also send, store, and get the actual (ns,set,key) with each record
 
     // The generation policy can be set using OPT_POLICY_GEN to one of
-    const POLICY_GEN_IGNORE = 0; // write a record, regardless of generation
+    const POLICY_GEN_IGNORE = 0; // write a record, regardless of generation (default)
     const POLICY_GEN_EQ     = 1; // write a record, ONLY if given value is equal to the current record generation
     const POLICY_GEN_GT     = 2; // write a record, ONLY if given value is greater-than the current record generation
 
@@ -79,7 +103,7 @@ final class Aerospike
     // behaving similar to an array in PHP. Setting
     // OPT_POLICY_EXISTS with one of these values will overwrite this.
     // POLICY_EXISTS_IGNORE (aka CREATE_OR_UPDATE) is the default value
-    const POLICY_EXISTS_IGNORE            = 0; // interleave bins of a record if it exists
+    const POLICY_EXISTS_IGNORE            = 0; // interleave bins of a record if it exists (default)
     const POLICY_EXISTS_CREATE            = 1; // create a record ONLY if it DOES NOT exist
     const POLICY_EXISTS_UPDATE            = 2; // update a record ONLY if it exists
     const POLICY_EXISTS_REPLACE           = 3; // replace a record ONLY if it exists
@@ -179,18 +203,24 @@ final class Aerospike
     const INDEX_STRING  = 0; // if the index type is matched, regard values of type string
     const INDEX_NUMERIC = 1; // if the index type is matched, regard values of type integer
 
-    const INDEX_TYPE_STRING  = 0;
-    const INDEX_TYPE_INTEGER = 1;
+    // UDF types
+    const UDF_TYPE_LUA = 0;
+
+    const JOB_QUERY = 'query';
+    const JOB_SCAN = 'scan';
+
+    // Status values returned by jobInfo()
+    const JOB_STATUS_COMPLETED = 2; // the job completed successfully.
 
     /**
      * @var int
      */
-    private $errorno;
+    private $errorno = 0;
 
     /**
      * @var string
      */
-    private $error;
+    private $error = '';
 
     /**
      * Constructs a new Aerospike object.
@@ -199,7 +229,7 @@ final class Aerospike
      * $config = ['hosts' => [['addr' => 'localhost', 'port' => 3000]]];
      * $opts = [Aerospike::OPT_CONNECT_TIMEOUT => 1250, Aerospike::OPT_WRITE_TIMEOUT => 1500];
      *
-     * $db = new Aerospike($config, true, $opts);
+     * $client = new Aerospike($config, true, $opts);
      * </code>
      *
      * @param array $config     An associative array holding the cluster connection information.
@@ -230,10 +260,10 @@ final class Aerospike
      * Tests the connection to the Aerospike DB.
      *
      * <code>
-     * $db = new Aerospike($config, true, $opts);
+     * $client = new Aerospike($config, true, $opts);
      *
-     * if (!$db->isConnected()) {
-     *     echo "Aerospike failed to connect[{$db->errorno()}]: {$db->error()}\n";
+     * if (!$client->isConnected()) {
+     *     echo "Aerospike failed to connect[{$client->errorno()}]: {$client->error()}\n";
      *     exit(1);
      * }
      * </code>
@@ -259,10 +289,10 @@ final class Aerospike
      * Reconnect to the Aerospike DB
      *
      * <code>
-     * $db = new Aerospike($config, true, $opts);
+     * $client = new Aerospike($config, true, $opts);
      *
-     * $db->close();
-     * $db->reconnect();
+     * $client->close();
+     * $client->reconnect();
      * </code>
      *
      * @return void
@@ -275,10 +305,10 @@ final class Aerospike
      * Display an error message associated with the last operation.
      *
      * <code>
-     * $db = new Aerospike($config);
+     * $client = new Aerospike($config);
      *
-     * if (!$db->isConnected()) {
-     *     echo "Aerospike failed to connect[{$db->errorno()}]: {$db->error()}\n";
+     * if (!$client->isConnected()) {
+     *     echo "Aerospike failed to connect[{$client->errorno()}]: {$client->error()}\n";
      *     exit(1);
      * }
      * <code>
@@ -290,13 +320,29 @@ final class Aerospike
     }
 
     /**
+     * Exposes the shared memory key used for storage by shared-memory cluster tending
+     *
+     * Example:
+     * <code>
+     * $config = ['hosts' => [['addr' => 'localhost', 'port' => 3000]], 'shm' => ['shm_key' => 0xA5000001]];
+     * $client = new Aerospike($config, true);
+     *
+     * $shared_memory_key = $client->shmKey();
+     * var_dump($shared_memory_key);
+     * </code>
+     */
+    public function shmKey()
+    {
+    }
+
+    /**
      * Display an error code associated with the last operation.
      *
      * <code>
-     * $db = new Aerospike($config);
+     * $client = new Aerospike($config);
      *
-     * if (!$db->isConnected()) {
-     *     echo "Aerospike failed to connect[{$db->errorno()}]: {$db->error()}\n";
+     * if (!$client->isConnected()) {
+     *     echo "Aerospike failed to connect[{$client->errorno()}]: {$client->error()}\n";
      *     exit(1);
      * }
      * <code>
@@ -334,10 +380,10 @@ final class Aerospike
      *
      * Example:
      * <code>
-     * $db = new Aerospike($config);
+     * $client = new Aerospike($config);
      *
-     * $db->setLogLevel(Aerospike::LOG_LEVEL_DEBUG);
-     * $db->setLogHandler(function ($level, $file, $function, $line) {
+     * $client->setLogLevel(Aerospike::LOG_LEVEL_DEBUG);
+     * $client->setLogHandler(function ($level, $file, $function, $line) {
      *     switch ($level) {
      *         case Aerospike::LOG_LEVEL_ERROR:
      *             $lvl_str = 'ERROR';
@@ -373,9 +419,9 @@ final class Aerospike
      * Helper method for building the key array.
      *
      * <code>
-     * $db = new Aerospike($config);
+     * $client = new Aerospike($config);
      *
-     * $key = $db->initKey('test', 'users', 1234);
+     * $key = $client->initKey('test', 'users', 1234);
      *
      * var_dump($key);
      * </code>
@@ -395,10 +441,10 @@ final class Aerospike
      * Helper method for building the key array.
      *
      * <code>
-     * $db = new Aerospike($config);
+     * $client = new Aerospike($config);
      *
-     * $digest = $db->getKeyDigest('test', 'users', 1);
-     * $key = $db->initKey('test', 'users', $digest, true);
+     * $digest = $client->getKeyDigest('test', 'users', 1);
+     * $key = $client->initKey('test', 'users', $digest, true);
      *
      * var_dump($digest, $key);
      * </code>
@@ -420,13 +466,13 @@ final class Aerospike
      *       Binary data containing the null byte (\0) may get truncated.
      *
      * <code>
-     * $db = new Aerospike($config);
+     * $client = new Aerospike($config);
      *
-     * $key = $db->initKey('test', 'users', 1234);
+     * $key = $client->initKey('test', 'users', 1234);
      *
      * // will ensure a record exists at the given key with the specified bins
      * $bins = ['email' => 'hey@example.com', 'name' => 'Hey There'];
-     * $status = $db->put($key, $bins);
+     * $status = $client->put($key, $bins);
      *
      * // will update the name bin, and create a new 'age' bin
      * $bins = ['name' => 'You There', 'age' => 33];
@@ -453,11 +499,11 @@ final class Aerospike
      * Gets a record from the Aerospike database.
      *
      * <code>
-     * $db = new Aerospike($config);
+     * $client = new Aerospike($config);
      *
-     * $key = $db->initKey('test', 'users', 1234);
+     * $key = $client->initKey('test', 'users', 1234);
      * $filter = ['email', 'manager'];
-     * $status = $db->get($key, $record, $filter);
+     * $status = $client->get($key, $record, $filter);
      *
      * var_dump($key, $record);
      * </code>
@@ -480,9 +526,9 @@ final class Aerospike
      * Check if a record exists in the Aerospike database
      *
      * <code>
-     * $db = new Aerospike($config, true, $opts);
-     * $key = $db->initKey('test', 'users', 1234);
-     * $status = $db->exists($key, $metadata);
+     * $client = new Aerospike($config, true, $opts);
+     * $key = $client->initKey('test', 'users', 1234);
+     * $status = $client->exists($key, $metadata);
      *
      * var_dump($status, $metadata);
      * </code>
@@ -505,11 +551,11 @@ final class Aerospike
      * Will touch the given record, resetting its time-to-live and incrementing its generation.
      *
      * <code>
-     * $db = new Aerospike($config);
-     * $key = $db->initKey('test', 'users', 1234);
+     * $client = new Aerospike($config);
+     * $key = $client->initKey('test', 'users', 1234);
      *
      * // Added 120 seconds to the record's expiration.
-     * $status = $db->touch($key, 120);
+     * $status = $client->touch($key, 120);
      *
      * var_dump($status);
      * </code>
@@ -532,10 +578,10 @@ final class Aerospike
      * Removes a record from the Aerospike database.
      *
      * <code>
-     * $db = new Aerospike($config);
-     * $key = $db->initKey('test', 'users', 1234);
+     * $client = new Aerospike($config);
+     * $key = $client->initKey('test', 'users', 1234);
      *
-     * $status = $db->remove($key, [Aerospike::OPT_POLICY_RETRY => Aerospike::POLICY_RETRY_NONE]);
+     * $status = $client->remove($key, [Aerospike::OPT_POLICY_RETRY => Aerospike::POLICY_RETRY_NONE]);
      *
      * var_dump($status);
      * </code>
@@ -567,12 +613,12 @@ final class Aerospike
      * Increments a numeric value in a bin.
      *
      * <code>
-     * $db = new Aerospike($config);
+     * $client = new Aerospike($config);
      *
-     * $key = $db->initKey('test', 'users', 1234);
+     * $key = $client->initKey('test', 'users', 1234);
      * $options = [Aerospike::OPT_TTL => 7200];
      *
-     * $status = $db->increment($key, 'pto', -4, $options);
+     * $status = $client->increment($key, 'pto', -4, $options);
      *
      * var_dump($status);
      * </code>
@@ -755,14 +801,90 @@ final class Aerospike
     }
 
     /**
+     * Apply a record UDF to each record matched by a query being executed in the background.
+     *
+     * Example Record UDF:
+     * <code>
+     * function mytransform(rec, offset)
+     *     rec['a'] = rec['a'] + offset
+     *     rec['b'] = rec['a'] * offset
+     *     rec['c'] = rec['a'] + rec['b']
+     *     aerospike:update(rec)
+     * end
+     * </code>
+     *
+     * Example:
+     * <code>
+     * $config = ['hosts' => [['addr' => 'localhost', 'port' => 3000]], 'shm' => []];
+     * $client = new Aerospike($config, true);
+     *
+     * $where = Aerospike::predicateBetween('age', 30, 39);
+     * $status = $client->queryApply('test', 'users', $where, 'my_udf', 'mytransform', [20], $job_id);
+     *
+     * var_dump($status, $job_id);
+     * </code>
+     *
+     * @param string $ns      The namespace.
+     * @param string $set     The set to be queried.
+     * @param array  $where   The predicate conforming to one of the following (associative array):
+     *                        [
+     *                             'bin' => bin name,
+     *                             'op'  => one of Aerospike::OP_* constants
+     *                             'val' => scalar integer/string for OP_EQ or array($min, $max) for OP_BETWEEN
+     *                         ].
+     * @param string $module   The name of the UDF module registered against the Aerospike DB.
+     * @param string $function The name of the function to be applied to the records.
+     * @param array  $args     An array of arguments for the UDF.
+     * @param int    $job_id   Filled by an integer handle for the initiated background query.
+     * @param array  $options  Options including: Aerospike::OPT_WRITE_TIMEOUT
+     *
+     * @return int
+     */
+    public function queryApply($ns, $set, array $where, $module, $function, array $args, &$job_id, array $options = [])
+    {
+    }
+
+    /**
      * @param int   $scan_id
      * @param array $info
      * @param array $options
+     * @deprecated
      *
      * @return int
      */
     public function scanInfo($scan_id, array &$info, array $options = [])
     {
+    }
+
+    /**
+     * Gets the status of a background job triggered by Aerospike::scanApply or Aerospike::queryApply
+     *
+     * <code>
+     * $config = ['hosts' => [['addr' => 'localhost', 'port' => 3000]], 'shm' => []];
+     * $client = new Aerospike($config, true);
+     *
+     * // after a queryApply() where $job_id was set:
+     * do {
+     *     time_nanosleep(0, 30000000); // pause 30ms
+     *     $status = $client->jobInfo($job_id, Aerospike::JOB_QUERY, $job_info);
+     *     var_dump($job_info);
+     * } while($job_info['status'] != Aerospike::JOB_STATUS_COMPLETED);
+     * </code>
+     *
+     * @param int   $job_id  The Job ID
+     * @param array $info    The status of the background job returned as an array conforming to the following:
+     *                       [
+     *                         'progress_pct' => progress percentage for the job
+     *                         'records_read' => number of records read by the job
+     *                         'status'       => one of Aerospike::STATUS_*
+     *                       ]
+     * @param array $options Options including: Aerospike::OPT_READ_TIMEOUT [Optional]
+     *
+     * @return int
+     */
+    public function jobInfo($job_id, array &$info, array $options = [])
+    {
+
     }
 
     /**
@@ -783,11 +905,11 @@ final class Aerospike
      * Scans a set in the Aerospike database.
      *
      * <code>
-     * $db = new Aerospike($config);
+     * $client = new Aerospike($config);
      * $options = [Aerospike::OPT_SCAN_PRIORITY => Aerospike::SCAN_PRIORITY_MEDIUM];
      * $processed = 0;
      *
-     * $status = $db->scan('test', 'users', function ($record) use (&$processed) {
+     * $status = $client->scan('test', 'users', function ($record) use (&$processed) {
      *     if (!is_null($record['bins']['email'])) echo $record['bins']['email']."\n";
      *     if ($processed++ > 19) return false; // halt the stream by returning a false
      * }, ['email'], $options);
@@ -886,8 +1008,8 @@ final class Aerospike
      * Send an info request to a single cluster node
      *
      * <code>
-     * $db = new Aerospike($config, true, $opts);
-     * $status = $db->info('bins/test', $response);
+     * $client = new Aerospike($config, true, $opts);
+     * $status = $client->info('bins/test', $response);
      *
      * var_dump($status, $response);
      * </code>
@@ -919,8 +1041,8 @@ final class Aerospike
      * Get the addresses of the cluster nodes
      *
      * <code>
-     * $db = new Aerospike($config, true, $opts);
-     * $nodes = $db->getNodes();
+     * $client = new Aerospike($config, true, $opts);
+     * $nodes = $client->getNodes();
      *
      * var_dump($nodes);
      * </code>
@@ -1094,21 +1216,6 @@ final class Aerospike
      * @return int
      */
     public function getMetadata(array $key, array &$metadata, array $options = [])
-    {
-    }
-
-    /**
-     * @param string $ns
-     * @param string $set
-     * @param string $bin
-     * @param int    $type
-     * @param string $name
-     *
-     * @deprecated
-     *
-     * @return int
-     */
-    public function createIndex($ns, $set, $bin, $type, $name)
     {
     }
 }
