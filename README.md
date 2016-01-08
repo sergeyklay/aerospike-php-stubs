@@ -8,7 +8,7 @@
 When working with PHP Aerospike class may crop up some difficulties when to use syntax highlighting or code autocompletion.
 This repo provide the most complete Aerospike PHP stubs which allows autocomplete in modern IDEs.
 
-Grabbed by using [Reflection](http://php.net/manual/en/book.reflection.php) from `aerospike.so` v3.4.5
+Grabbed by using [Reflection](http://php.net/manual/en/book.reflection.php) from `aerospike.so`
 and [Aerospike doc](https://github.com/aerospike/aerospike-client-php/blob/master/doc/aerospike.md)
 
 ## Install
@@ -24,7 +24,7 @@ Create the composer.json file as follows:
 ```json
 {
     "require": {
-        "sergeyklay/aerospike-php-stubs": "dev-master"
+        "sergeyklay/aerospike-php-stubs": "*"
     }
 }
 ```
