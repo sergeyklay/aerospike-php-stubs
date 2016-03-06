@@ -13,16 +13,17 @@ final class Aerospike
     const OPT_SCAN_PERCENTAGE     = 8;  // integer value 1-100 (default: 100)
     const OPT_SCAN_CONCURRENTLY   = 9;  // boolean value (default: false)
     const OPT_SCAN_NOBINS         = 10; // boolean value (default: false)
-    const OPT_POLICY_KEY          = 11; // records store the digest unique ID, optionally also its (ns,set,key) inputs
-    const OPT_POLICY_GEN          = 12; // set to [Aerospike::POLICY_GEN_* [, $gen_value ]]
-    const OPT_POLICY_REPLICA      = 13; // set to one of Aerospike::POLICY_REPLICA_*
-    const OPT_POLICY_CONSISTENCY  = 14; // set to one of Aerospike::POLICY_CONSISTENCY_*
-    const OPT_POLICY_COMMIT_LEVEL = 15; // set to one of Aerospike::POLICY_COMMIT_LEVEL_*
-    const OPT_TTL                 = 16; // record ttl, value in seconds
-    const USE_BATCH_DIRECT        = 17; // batch-direct or batch-index protocol (default: 0)
+    const OPT_SCAN_INCLUDELDT     = 11; // boolean value (default: false)
+    const OPT_POLICY_KEY          = 12; // records store the digest unique ID, optionally also its (ns,set,key) inputs
+    const OPT_POLICY_GEN          = 13; // set to [Aerospike::POLICY_GEN_* [, $gen_value ]]
+    const OPT_POLICY_REPLICA      = 14; // set to one of Aerospike::POLICY_REPLICA_*
+    const OPT_POLICY_CONSISTENCY  = 15; // set to one of Aerospike::POLICY_CONSISTENCY_*
+    const OPT_POLICY_COMMIT_LEVEL = 16; // set to one of Aerospike::POLICY_COMMIT_LEVEL_*
+    const OPT_TTL                 = 17; // record ttl, value in seconds
+    const USE_BATCH_DIRECT        = 18; // batch-direct or batch-index protocol (default: 0)
 
     // UDF types
-    const UDF_TYPE_LU = 0;
+    const UDF_TYPE_LUA = 0;
 
     // Determines a handler for writing values of unsupported type into bins
     // Set OPT_SERIALIZER to one of the following:
@@ -115,7 +116,24 @@ final class Aerospike
     const OP_CONTAINS = 'CONTAINS';
     const OP_BETWEEN  = 'BETWEEN';
 
+    const OP_GEOWITHINREGION = 'GEOWITHIN';
+
+    const OP_LIST_APPEND = 1001;
+    const OP_LIST_INSERT = 1003;
+    const OP_LIST_INSERT_ITEMS = 1004;
+    const OP_LIST_POP = 1005;
+    const OP_LIST_POP_RANGE = 1006;
+    const OP_LIST_REMOVE = 1007;
+    const OP_LIST_REMOVE_RANGE = 1008;
+    const OP_LIST_SET = 1009;
+    const OP_LIST_TRIM = 1010;
+    const OP_LIST_CLEAR = 1011;
+    const OP_LIST_SIZE = 1016;
+    const OP_LIST_GET = 1017;
+    const OP_LIST_GET_RANGE = 1018;
+
     // Multi-operation operators map to the C client
+    //  src/include/aerospike/as_operations.h
     const OPERATOR_READ    = 1;
     const OPERATOR_WRITE   = 2;
     const OPERATOR_INCR    = 5;
@@ -203,14 +221,16 @@ final class Aerospike
     const INDEX_STRING  = 0; // if the index type is matched, regard values of type string
     const INDEX_NUMERIC = 1; // if the index type is matched, regard values of type integer
 
-    // UDF types
-    const UDF_TYPE_LUA = 0;
-
     const JOB_QUERY = 'query';
     const JOB_SCAN = 'scan';
 
     // Status values returned by jobInfo()
-    const JOB_STATUS_COMPLETED = 2; // the job completed successfully.
+    const JOB_STATUS_UNDEF      = 0; // the job's status is undefined.
+    const JOB_STATUS_INPROGRESS = 1; // the job is currently running.
+    const JOB_STATUS_COMPLETED  = 2; // the job completed successfully.
+
+
+    const COMPRESSION_THRESHOLD = 19;
 
     /**
      * @var int
@@ -221,6 +241,7 @@ final class Aerospike
      * @var string
      */
     private $error = '';
+
 
     /**
      * Constructs a new Aerospike object.
@@ -1216,6 +1237,74 @@ final class Aerospike
      * @return int
      */
     public function getMetadata(array $key, array &$metadata, array $options = [])
+    {
+    }
+
+    public static function predicateGeoWithinGeoJSONRegion()
+    {
+    }
+
+    public static function predicateGeoWithinRadius()
+    {
+    }
+
+    public static function predicateGeoContainsGeoJSONPoint()
+    {
+    }
+
+    public static function predicateGeoContainsPoint()
+    {
+    }
+
+    public function listInsert()
+    {
+    }
+
+    public function listSet()
+    {
+    }
+
+    public function listMerge()
+    {
+    }
+
+    public function listSize()
+    {
+    }
+
+    public function listClear()
+    {
+    }
+
+    public function listTrim()
+    {
+    }
+
+    public function listInsertItems()
+    {
+    }
+
+    public function listGet()
+    {
+    }
+
+    public function listGetRange()
+    {
+    }
+
+    public function listPop()
+    {
+    }
+
+    public function listPopRange()
+    {
+    }
+
+    public function listRemove()
+    {
+    }
+
+    public function listRemoveRange()
     {
     }
 }
