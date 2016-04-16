@@ -13,16 +13,17 @@ final class Aerospike
     const OPT_SCAN_PERCENTAGE     = 8;  // integer value 1-100 (default: 100)
     const OPT_SCAN_CONCURRENTLY   = 9;  // boolean value (default: false)
     const OPT_SCAN_NOBINS         = 10; // boolean value (default: false)
-    const OPT_POLICY_KEY          = 11; // records store the digest unique ID, optionally also its (ns,set,key) inputs
-    const OPT_POLICY_GEN          = 12; // set to [Aerospike::POLICY_GEN_* [, $gen_value ]]
-    const OPT_POLICY_REPLICA      = 13; // set to one of Aerospike::POLICY_REPLICA_*
-    const OPT_POLICY_CONSISTENCY  = 14; // set to one of Aerospike::POLICY_CONSISTENCY_*
-    const OPT_POLICY_COMMIT_LEVEL = 15; // set to one of Aerospike::POLICY_COMMIT_LEVEL_*
-    const OPT_TTL                 = 16; // record ttl, value in seconds
-    const USE_BATCH_DIRECT        = 17; // batch-direct or batch-index protocol (default: 0)
+    const OPT_SCAN_INCLUDELDT     = 11; // boolean value (default: false)
+    const OPT_POLICY_KEY          = 12; // records store the digest unique ID, optionally also its (ns,set,key) inputs
+    const OPT_POLICY_GEN          = 13; // set to [Aerospike::POLICY_GEN_* [, $gen_value ]]
+    const OPT_POLICY_REPLICA      = 14; // set to one of Aerospike::POLICY_REPLICA_*
+    const OPT_POLICY_CONSISTENCY  = 15; // set to one of Aerospike::POLICY_CONSISTENCY_*
+    const OPT_POLICY_COMMIT_LEVEL = 16; // set to one of Aerospike::POLICY_COMMIT_LEVEL_*
+    const OPT_TTL                 = 17; // record ttl, value in seconds
+    const USE_BATCH_DIRECT        = 18; // batch-direct or batch-index protocol (default: 0)
 
     // UDF types
-    const UDF_TYPE_LU = 0;
+    const UDF_TYPE_LUA = 0;
 
     // Determines a handler for writing values of unsupported type into bins
     // Set OPT_SERIALIZER to one of the following:
@@ -115,7 +116,24 @@ final class Aerospike
     const OP_CONTAINS = 'CONTAINS';
     const OP_BETWEEN  = 'BETWEEN';
 
+    const OP_GEOWITHINREGION = 'GEOWITHIN';
+
+    const OP_LIST_APPEND = 1001;
+    const OP_LIST_INSERT = 1003;
+    const OP_LIST_INSERT_ITEMS = 1004;
+    const OP_LIST_POP = 1005;
+    const OP_LIST_POP_RANGE = 1006;
+    const OP_LIST_REMOVE = 1007;
+    const OP_LIST_REMOVE_RANGE = 1008;
+    const OP_LIST_SET = 1009;
+    const OP_LIST_TRIM = 1010;
+    const OP_LIST_CLEAR = 1011;
+    const OP_LIST_SIZE = 1016;
+    const OP_LIST_GET = 1017;
+    const OP_LIST_GET_RANGE = 1018;
+
     // Multi-operation operators map to the C client
+    //  src/include/aerospike/as_operations.h
     const OPERATOR_READ    = 1;
     const OPERATOR_WRITE   = 2;
     const OPERATOR_INCR    = 5;
@@ -203,14 +221,16 @@ final class Aerospike
     const INDEX_STRING  = 0; // if the index type is matched, regard values of type string
     const INDEX_NUMERIC = 1; // if the index type is matched, regard values of type integer
 
-    // UDF types
-    const UDF_TYPE_LUA = 0;
-
     const JOB_QUERY = 'query';
     const JOB_SCAN = 'scan';
 
     // Status values returned by jobInfo()
-    const JOB_STATUS_COMPLETED = 2; // the job completed successfully.
+    const JOB_STATUS_UNDEF      = 0; // the job's status is undefined.
+    const JOB_STATUS_INPROGRESS = 1; // the job is currently running.
+    const JOB_STATUS_COMPLETED  = 2; // the job completed successfully.
+
+
+    const COMPRESSION_THRESHOLD = 19;
 
     /**
      * @var int
@@ -221,6 +241,7 @@ final class Aerospike
      * @var string
      */
     private $error = '';
+
 
     /**
      * Constructs a new Aerospike object.
@@ -1204,6 +1225,11 @@ final class Aerospike
     {
     }
 
+    /**
+     * Returns the object's record structure.
+     *
+     * @return array
+     */
     public function getHeader()
     {
     }
@@ -1216,6 +1242,245 @@ final class Aerospike
      * @return int
      */
     public function getMetadata(array $key, array &$metadata, array $options = [])
+    {
+    }
+
+    /**
+     * @param string $bin
+     * @param string $region
+     *
+     * @return array
+     */
+    public static function predicateGeoWithinGeoJSONRegion($bin, $region)
+    {
+    }
+
+    /**
+     * @param string $bin
+     * @param float  $long
+     * @param float  $lat
+     * @param float  $radiusMeter
+     *
+     * @return array
+     */
+    public static function predicateGeoWithinRadius($bin, $long, $lat, $radiusMeter)
+    {
+    }
+
+    /**
+     * @param string $bin
+     * @param string $point
+     *
+     * @return array
+     */
+    public static function predicateGeoContainsGeoJSONPoint($bin, $point)
+    {
+    }
+
+    /**
+     * @param string $bin
+     * @param float  $long
+     * @param float  $lat
+     * @param float  $radiusMeter
+     *
+     * @return array
+     */
+    public static function predicateGeoContainsPoint($bin, $long, $lat, $radiusMeter)
+    {
+    }
+
+    /**
+     * Insert an element at the specified index of a list value in the bin.
+     *
+     * @param array  $key
+     * @param string $bin
+     * @param int    $index
+     * @param mixed  $value
+     * @param array  $options
+     *
+     * @return int
+     */
+    public function listInsert(array $key, $bin, $index, $value, array $options = [])
+    {
+    }
+
+    /**
+     * Set list element val at the specified index of a list value in the bin.
+     *
+     * @param array  $key
+     * @param string $bin
+     * @param int    $index
+     * @param mixed  $value
+     * @param array  $options
+     *
+     * @return int
+     */
+    public function listSet(array $key, $bin, $index, $value, array $options = [])
+    {
+    }
+
+    /**
+     * Add items to the end of a list.
+     *
+     * @param array  $key
+     * @param string $bin
+     * @param array  $items
+     * @param array  $options
+     *
+     * @return int
+     */
+    public function listMerge(array $key, $bin, array $items, array $options = [])
+    {
+    }
+
+    /**
+     * Count the elements of the list value in the bin.
+     *
+     * @param array  $key
+     * @param string $bin
+     * @param int    $count
+     * @param array  $options
+     *
+     * @return int
+     */
+    public function listSize(array $key, $bin, &$count, array $options = [])
+    {
+    }
+
+    /**
+     * Remove all the elements from the list value in the bin.
+     *
+     * @param array  $key
+     * @param string $bin
+     * @param array  $options
+     *
+     * @return int
+     */
+    public function listClear(array $key, $bin, array $options = [])
+    {
+    }
+
+    /**
+     * Trim the list, removing all elements not in the range starting at a given index plus count.
+     *
+     * @param array  $key
+     * @param string $bin
+     * @param int    $index
+     * @param int    $count
+     * @param array  $options
+     *
+     * @return int
+     */
+    public function listTrim(array $key, $bin, $index, $count, array $options = [])
+    {
+    }
+
+    /**
+     * Insert items at the specified index of a list value in the bin.
+     *
+     * @param array  $key
+     * @param string $bin
+     * @param int    $index
+     * @param array  $items
+     * @param array  $options
+     *
+     * @return int
+     */
+    public function listInsertItems(array $key, $bin, $index, array $items, array $options = [])
+    {
+    }
+
+    /**
+     * Get the list element at the specified index of a list value in the bin.
+     *
+     * @param array  $key
+     * @param string $bin
+     * @param int    $index
+     * @param array  $elements
+     * @param array  $options
+     *
+     * @return int
+     */
+    public function listGet(array $key, $bin, $index, array &$elements, array $options = [])
+    {
+    }
+
+    /**
+     * Get the list of $count elements starting at a specified index of a list value in the bin.
+     *
+     * @param array  $key
+     * @param string $bin
+     * @param int    $index
+     * @param int    $count
+     * @param array  $elements
+     * @param array  $options
+     *
+     * @return int
+     */
+    public function listGetRange(array $key, $bin, $index, $count, array &$elements, array $options = [])
+    {
+    }
+
+    /**
+     * Remove and get back the list element at a given index of a list value in the bin.
+     *
+     * Index -1 is the last item in the list, -3 is the third from last, 0 is the first in the list.
+     *
+     * @param array  $key
+     * @param string $bin
+     * @param int    $index
+     * @param array  $elements
+     * @param array  $options
+     *
+     * @return int
+     */
+    public function listPop(array $key, $bin, $index, array &$elements, array $options = [])
+    {
+    }
+
+    /**
+     * Remove and get back list elements at a given index of a list value in the bin.
+     *
+     * @param array  $key
+     * @param string $bin
+     * @param int    $index
+     * @param int    $count
+     * @param array  $elements
+     * @param array  $options
+     *
+     * @return int
+     */
+    public function listPopRange(array $key, $bin, $index, $count, array &$elements, array $options = [])
+    {
+    }
+
+    /**
+     * Remove list elements at a given index of a list value in the bin.
+     *
+     * @param array  $key
+     * @param string $bin
+     * @param int    $index
+     * @param int    $count
+     * @param array  $options
+     *
+     * @return int
+     */
+    public function listRemove(array $key, $bin, $index, $count, array $options = [])
+    {
+    }
+
+    /**
+     * Remove list elements at a given index of a list value in the bin.
+     *
+     * @param array  $key
+     * @param string $bin
+     * @param int    $index
+     * @param int    $count
+     * @param array  $options
+     *
+     * @return int
+     */
+    public function listRemoveRange(array $key, $bin, $index, $count, array $options = [])
     {
     }
 }
