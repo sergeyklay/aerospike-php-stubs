@@ -1,5 +1,38 @@
 <?php
 
+/**
+ * Aerospike Stub.
+ *
+ * The most complete Aerospike PHP stubs which allows autocomplete in modern IDEs.
+ *
+ * Default INI entries is:
+ *
+ *   aerospike.nesting_depth = 3
+ *   aerospike.connect_timeout = 1000
+ *   aerospike.read_timeout = 1000
+ *   aerospike.write_timeout = 1000
+ *   aerospike.log_path =
+ *   aerospike.log_level =
+ *   aerospike.serializer = php
+ *   aerospike.udf.lua_system_path = /usr/local/aerospike/lua
+ *   aerospike.udf.lua_user_path = /usr/local/aerospike/usr-lua
+ *   aerospike.key_policy = 0
+ *   aerospike.key_gen = 0
+ *   aerospike.shm.use = false
+ *   aerospike.shm.key = 0xA5000000
+ *   aerospike.shm.max_nodes = 16
+ *   aerospike.shm.max_namespaces = 8
+ *   aerospike.shm.takeover_threshold_sec = 30
+ *   aerospike.use_batch_direct = false
+ *   aerospike.max_threads = 300
+ *   aerospike.thread_pool_size = 16
+ *   aerospike.compression_threshold = 0
+ *
+ * @copyright (c) 2015-2016 Serghei Iakovlev
+ * @link      https://github.com/aerospike/aerospike-client-php
+ * @author    Serghei Iakovlev <me@klay.me>
+ * @license   MIT
+ */
 final class Aerospike
 {
     // Options can be assigned values that modify default behavior
@@ -31,8 +64,6 @@ final class Aerospike
     const SERIALIZER_PHP  = 1; // use the PHP serialize/unserialize functions (default)
     const SERIALIZER_JSON = 2;
     const SERIALIZER_USER = 3; // use a user-defined serializer
-
-    // Status values returned by scanInfo(). Deprecated in favor of jobInfo()
 
     /**
      * Scan status is undefined
@@ -116,21 +147,22 @@ final class Aerospike
     const OP_CONTAINS = 'CONTAINS';
     const OP_BETWEEN  = 'BETWEEN';
 
-    const OP_GEOWITHINREGION = 'GEOWITHIN';
+    const OP_GEOWITHINREGION  = 'GEOWITHIN';
+    const OP_GEOCONTAINSPOINT = 'GEOCONTAINS';
 
-    const OP_LIST_APPEND = 1001;
-    const OP_LIST_INSERT = 1003;
+    const OP_LIST_APPEND       = 1001;
+    const OP_LIST_INSERT       = 1003;
     const OP_LIST_INSERT_ITEMS = 1004;
-    const OP_LIST_POP = 1005;
-    const OP_LIST_POP_RANGE = 1006;
-    const OP_LIST_REMOVE = 1007;
+    const OP_LIST_POP          = 1005;
+    const OP_LIST_POP_RANGE    = 1006;
+    const OP_LIST_REMOVE       = 1007;
     const OP_LIST_REMOVE_RANGE = 1008;
-    const OP_LIST_SET = 1009;
-    const OP_LIST_TRIM = 1010;
-    const OP_LIST_CLEAR = 1011;
-    const OP_LIST_SIZE = 1016;
-    const OP_LIST_GET = 1017;
-    const OP_LIST_GET_RANGE = 1018;
+    const OP_LIST_SET          = 1009;
+    const OP_LIST_TRIM         = 1010;
+    const OP_LIST_CLEAR        = 1011;
+    const OP_LIST_SIZE         = 1016;
+    const OP_LIST_GET          = 1017;
+    const OP_LIST_GET_RANGE    = 1018;
 
     // Multi-operation operators map to the C client
     //  src/include/aerospike/as_operations.h
@@ -192,6 +224,7 @@ final class Aerospike
     const ERR_ROLE_VIOLATION                = 81;
     const ERR_UDF                           = 100;  // Generic UDF error
     const ERR_LARGE_ITEM_NOT_FOUND          = 125;
+    const ERR_GEO_INVALID_GEOJSON           = 160;
     const ERR_INDEX_FOUND                   = 200;
     const ERR_INDEX_NOT_FOUND               = 201;
     const ERR_INDEX_OOM                     = 202;  // Index out of memory
@@ -218,8 +251,9 @@ final class Aerospike
     const INDEX_TYPE_MAPVALUES = 3; // index the values of records whose specified bin is a map
 
     // Data type
-    const INDEX_STRING  = 0; // if the index type is matched, regard values of type string
-    const INDEX_NUMERIC = 1; // if the index type is matched, regard values of type integer
+    const INDEX_STRING      = 0; // if the index type is matched, regard values of type string
+    const INDEX_NUMERIC     = 1; // if the index type is matched, regard values of type integer
+    const INDEX_GEO2DSPHERE = 2;
 
     const JOB_QUERY = 'query';
     const JOB_SCAN = 'scan';
@@ -228,7 +262,6 @@ final class Aerospike
     const JOB_STATUS_UNDEF      = 0; // the job's status is undefined.
     const JOB_STATUS_INPROGRESS = 1; // the job is currently running.
     const JOB_STATUS_COMPLETED  = 2; // the job completed successfully.
-
 
     const COMPRESSION_THRESHOLD = 19;
 
@@ -241,7 +274,6 @@ final class Aerospike
      * @var string
      */
     private $error = '';
-
 
     /**
      * Constructs a new Aerospike object.
@@ -692,6 +724,25 @@ final class Aerospike
      * @return int
      */
     public function operate(array $key, array $operations, array &$returned = [])
+    {
+    }
+
+    /**
+     * Multiple operations on a single record.
+     *
+     * @param array $key        The key identifying the record.
+     *                          An array with keys ['ns','set','key'] or ['ns','set','digest'].
+     * @param array $operations An array of one or more per-bin operations.
+     * @param array $returned   An indexed array of bins retrieved by read operations. [Optional]
+     * @param array  $options   Options including:
+     *                          Aerospike::OPT_WRITE_TIMEOUT, Aerospike::OPT_TTL
+     *                          Aerospike::OPT_POLICY_RETRY, Aerospike::OPT_POLICY_KEY,
+     *                          Aerospike::OPT_POLICY_GEN, Aerospike::OPT_POLICY_REPLICA,
+     *                          Aerospike::OPT_POLICY_CONSISTENCY, Aerospike::OPT_POLICY_COMMIT_LEVEL [Optional]
+     *
+     * @return int
+     */
+    public function operateOrdered(array $key, array $operations, array &$returned = [], array $options = [])
     {
     }
 
@@ -1402,6 +1453,20 @@ final class Aerospike
      * @return int
      */
     public function listGet(array $key, $bin, $index, array &$elements, array $options = [])
+    {
+    }
+
+    /**
+     * Add a single value (of any type) to the end of the list.
+     *
+     * @param array  $key
+     * @param string $bin
+     * @param mixed  $value
+     * @param array  $options
+     *
+     * @return int
+     */
+    public function listAppend(array $key, $bin, $value, array $options = [])
     {
     }
 
