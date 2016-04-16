@@ -1225,6 +1225,11 @@ final class Aerospike
     {
     }
 
+    /**
+     * Returns the object's record structure.
+     *
+     * @return array
+     */
     public function getHeader()
     {
     }
@@ -1240,71 +1245,242 @@ final class Aerospike
     {
     }
 
-    public static function predicateGeoWithinGeoJSONRegion()
+    /**
+     * @param string $bin
+     * @param string $region
+     *
+     * @return array
+     */
+    public static function predicateGeoWithinGeoJSONRegion($bin, $region)
     {
     }
 
-    public static function predicateGeoWithinRadius()
+    /**
+     * @param string $bin
+     * @param float  $long
+     * @param float  $lat
+     * @param float  $radiusMeter
+     *
+     * @return array
+     */
+    public static function predicateGeoWithinRadius($bin, $long, $lat, $radiusMeter)
     {
     }
 
-    public static function predicateGeoContainsGeoJSONPoint()
+    /**
+     * @param string $bin
+     * @param string $point
+     *
+     * @return array
+     */
+    public static function predicateGeoContainsGeoJSONPoint($bin, $point)
     {
     }
 
-    public static function predicateGeoContainsPoint()
+    /**
+     * @param string $bin
+     * @param float  $long
+     * @param float  $lat
+     * @param float  $radiusMeter
+     *
+     * @return array
+     */
+    public static function predicateGeoContainsPoint($bin, $long, $lat, $radiusMeter)
     {
     }
 
-    public function listInsert()
+    /**
+     * Insert an element at the specified index of a list value in the bin.
+     *
+     * @param array  $key
+     * @param string $bin
+     * @param int    $index
+     * @param mixed  $value
+     * @param array  $options
+     *
+     * @return int
+     */
+    public function listInsert(array $key, $bin, $index, $value, array $options = [])
     {
     }
 
-    public function listSet()
+    /**
+     * Set list element val at the specified index of a list value in the bin.
+     *
+     * @param array  $key
+     * @param string $bin
+     * @param int    $index
+     * @param mixed  $value
+     * @param array  $options
+     *
+     * @return int
+     */
+    public function listSet(array $key, $bin, $index, $value, array $options = [])
     {
     }
 
-    public function listMerge()
+    /**
+     * Add items to the end of a list.
+     *
+     * @param array  $key
+     * @param string $bin
+     * @param array  $items
+     * @param array  $options
+     *
+     * @return int
+     */
+    public function listMerge(array $key, $bin, array $items, array $options = [])
     {
     }
 
-    public function listSize()
+    /**
+     * Count the elements of the list value in the bin.
+     *
+     * @param array  $key
+     * @param string $bin
+     * @param int    $count
+     * @param array  $options
+     *
+     * @return int
+     */
+    public function listSize(array $key, $bin, &$count, array $options = [])
     {
     }
 
-    public function listClear()
+    /**
+     * Remove all the elements from the list value in the bin.
+     *
+     * @param array  $key
+     * @param string $bin
+     * @param array  $options
+     *
+     * @return int
+     */
+    public function listClear(array $key, $bin, array $options = [])
     {
     }
 
-    public function listTrim()
+    /**
+     * Trim the list, removing all elements not in the range starting at a given index plus count.
+     *
+     * @param array  $key
+     * @param string $bin
+     * @param int    $index
+     * @param int    $count
+     * @param array  $options
+     *
+     * @return int
+     */
+    public function listTrim(array $key, $bin, $index, $count, array $options = [])
     {
     }
 
-    public function listInsertItems()
+    /**
+     * Insert items at the specified index of a list value in the bin.
+     *
+     * @param array  $key
+     * @param string $bin
+     * @param int    $index
+     * @param array  $items
+     * @param array  $options
+     *
+     * @return int
+     */
+    public function listInsertItems(array $key, $bin, $index, array $items, array $options = [])
     {
     }
 
-    public function listGet()
+    /**
+     * Get the list element at the specified index of a list value in the bin.
+     *
+     * @param array  $key
+     * @param string $bin
+     * @param int    $index
+     * @param array  $elements
+     * @param array  $options
+     *
+     * @return int
+     */
+    public function listGet(array $key, $bin, $index, array &$elements, array $options = [])
     {
     }
 
-    public function listGetRange()
+    /**
+     * Get the list of $count elements starting at a specified index of a list value in the bin.
+     *
+     * @param array  $key
+     * @param string $bin
+     * @param int    $index
+     * @param int    $count
+     * @param array  $elements
+     * @param array  $options
+     *
+     * @return int
+     */
+    public function listGetRange(array $key, $bin, $index, $count, array &$elements, array $options = [])
     {
     }
 
-    public function listPop()
+    /**
+     * Remove and get back the list element at a given index of a list value in the bin.
+     *
+     * Index -1 is the last item in the list, -3 is the third from last, 0 is the first in the list.
+     *
+     * @param array  $key
+     * @param string $bin
+     * @param int    $index
+     * @param array  $elements
+     * @param array  $options
+     *
+     * @return int
+     */
+    public function listPop(array $key, $bin, $index, array &$elements, array $options = [])
     {
     }
 
-    public function listPopRange()
+    /**
+     * Remove and get back list elements at a given index of a list value in the bin.
+     *
+     * @param array  $key
+     * @param string $bin
+     * @param int    $index
+     * @param int    $count
+     * @param array  $elements
+     * @param array  $options
+     *
+     * @return int
+     */
+    public function listPopRange(array $key, $bin, $index, $count, array &$elements, array $options = [])
     {
     }
 
-    public function listRemove()
+    /**
+     * Remove list elements at a given index of a list value in the bin.
+     *
+     * @param array  $key
+     * @param string $bin
+     * @param int    $index
+     * @param int    $count
+     * @param array  $options
+     *
+     * @return int
+     */
+    public function listRemove(array $key, $bin, $index, $count, array $options = [])
     {
     }
 
-    public function listRemoveRange()
+    /**
+     * Remove list elements at a given index of a list value in the bin.
+     *
+     * @param array  $key
+     * @param string $bin
+     * @param int    $index
+     * @param int    $count
+     * @param array  $options
+     *
+     * @return int
+     */
+    public function listRemoveRange(array $key, $bin, $index, $count, array $options = [])
     {
     }
 }
