@@ -1,5 +1,38 @@
 <?php
 
+/**
+ * Aerospike Stub.
+ *
+ * The most complete Aerospike PHP stubs which allows autocomplete in modern IDEs.
+ *
+ * Default INI entries is:
+ *
+ *   aerospike.nesting_depth = 3
+ *   aerospike.connect_timeout = 1000
+ *   aerospike.read_timeout = 1000
+ *   aerospike.write_timeout = 1000
+ *   aerospike.log_path =
+ *   aerospike.log_level =
+ *   aerospike.serializer = php
+ *   aerospike.udf.lua_system_path = /usr/local/aerospike/lua
+ *   aerospike.udf.lua_user_path = /usr/local/aerospike/usr-lua
+ *   aerospike.key_policy = 0
+ *   aerospike.key_gen = 0
+ *   aerospike.shm.use = false
+ *   aerospike.shm.key = 0xA5000000
+ *   aerospike.shm.max_nodes = 16
+ *   aerospike.shm.max_namespaces = 8
+ *   aerospike.shm.takeover_threshold_sec = 30
+ *   aerospike.use_batch_direct = false
+ *   aerospike.max_threads = 300
+ *   aerospike.thread_pool_size = 16
+ *   aerospike.compression_threshold = 0
+ *
+ * @copyright (c) 2015-2016 Serghei Iakovlev
+ * @link      https://github.com/aerospike/aerospike-client-php
+ * @author    Serghei Iakovlev <me@klay.me>
+ * @license   MIT
+ */
 final class Aerospike
 {
     // Options can be assigned values that modify default behavior
