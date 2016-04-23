@@ -294,7 +294,7 @@ final class Aerospike
      *                          Aerospike::OPT_POLICY_RETRY, Aerospike::OPT_POLICY_COMMIT_LEVEL
      *                          Aerospike::OPT_POLICY_CONSISTENCY, Aerospike::OPT_POLICY_REPLICA [Optional]
      */
-    public function __construct(array $config, $persistent = true, array $options = [])
+    public function __construct(array $config, $persistent = true, array $options = null)
     {
     }
 
@@ -544,7 +544,7 @@ final class Aerospike
      *
      * @return int
      */
-    public function put(array $key, array $bins, $ttl = 0, array $options = [])
+    public function put(array $key, array $bins, $ttl = 0, array $options = null)
     {
     }
 
@@ -571,7 +571,7 @@ final class Aerospike
      *
      * @return int
      */
-    public function get(array $key, array &$record, array $select = [], array $options = [])
+    public function get(array $key, array &$record, array $select = null, array $options = null)
     {
     }
 
@@ -594,7 +594,7 @@ final class Aerospike
      *                        Aerospike::OPT_POLICY_CONSISTENCY, Aerospike::OPT_POLICY_REPLICA [Optional]
      * @return int
      */
-    public function exists(array $key, array &$metadata, array $options = [])
+    public function exists(array $key, array &$metadata, array $options = null)
     {
     }
 
@@ -623,7 +623,7 @@ final class Aerospike
      *
      * @return int
      */
-    public function touch(array $key, $ttl = 0, array $options = [])
+    public function touch(array $key, $ttl = 0, array $options = null)
     {
     }
 
@@ -647,7 +647,7 @@ final class Aerospike
      *
      * @return int
      */
-    public function remove(array $key, array $options = [])
+    public function remove(array $key, array $options = null)
     {
     }
 
@@ -658,7 +658,7 @@ final class Aerospike
      *
      * @return int
      */
-    public function removeBin(array $key, array $bins, array $options = [])
+    public function removeBin(array $key, array $bins, array $options = null)
     {
     }
 
@@ -688,7 +688,7 @@ final class Aerospike
      *
      * @return int
      */
-    public function increment(array $key, $bin, $offset, array $options = [])
+    public function increment(array $key, $bin, $offset, array $options = null)
     {
     }
 
@@ -700,7 +700,7 @@ final class Aerospike
      *
      * @return int
      */
-    public function append(array $key, $bin, $value, array $options = [])
+    public function append(array $key, $bin, $value, array $options = null)
     {
     }
 
@@ -712,7 +712,7 @@ final class Aerospike
      *
      * @return int
      */
-    public function prepend(array $key, $bin, $value, array $options = [])
+    public function prepend(array $key, $bin, $value, array $options = null)
     {
     }
 
@@ -742,7 +742,7 @@ final class Aerospike
      *
      * @return int
      */
-    public function operateOrdered(array $key, array $operations, array &$returned = [], array $options = [])
+    public function operateOrdered(array $key, array $operations, array &$returned = null, array $options = null)
     {
     }
 
@@ -800,7 +800,7 @@ final class Aerospike
      *
      * @return int
      */
-    public function getMany(array $keys, array &$records, array $filter = [], array $options = [])
+    public function getMany(array $keys, array &$records, array $filter = null, array $options = null)
     {
     }
 
@@ -811,7 +811,7 @@ final class Aerospike
      *
      * @return int
      */
-    public function existsMany(array $keys, array &$metadata, array $options = [])
+    public function existsMany(array $keys, array &$metadata, array $options = null)
     {
     }
 
@@ -865,7 +865,7 @@ final class Aerospike
      *
      * @return int
      */
-    public function apply(array $key, $module, $function, array $args = [], &$returned = null, array $options = [])
+    public function apply(array $key, $module, $function, array $args = null, &$returned = null, array $options = null)
     {
     }
 
@@ -881,7 +881,7 @@ final class Aerospike
      *
      * @return int
      */
-    public function aggregate($ns, $set, array $where, $module, $function, array $args, &$returned = null, array $options = [])
+    public function aggregate($ns, $set, array $where, $module, $function, array $args, &$returned = null, array $options = null)
     {
     }
 
@@ -896,7 +896,7 @@ final class Aerospike
      *
      * @return int
      */
-    public function scanApply($ns, $set, $module, $function, array $args, &$scan_id, array $options = [])
+    public function scanApply($ns, $set, $module, $function, array $args, &$scan_id, array $options = null)
     {
     }
 
@@ -940,7 +940,7 @@ final class Aerospike
      *
      * @return int
      */
-    public function queryApply($ns, $set, array $where, $module, $function, array $args, &$job_id, array $options = [])
+    public function queryApply($ns, $set, array $where, $module, $function, array $args, &$job_id, array $options = null)
     {
     }
 
@@ -952,7 +952,7 @@ final class Aerospike
      *
      * @return int
      */
-    public function scanInfo($scan_id, array &$info, array $options = [])
+    public function scanInfo($scan_id, array &$info, array $options = null)
     {
     }
 
@@ -982,7 +982,7 @@ final class Aerospike
      *
      * @return int
      */
-    public function jobInfo($job_id, array &$info, array $options = [])
+    public function jobInfo($job_id, array &$info, array $options = null)
     {
 
     }
@@ -997,7 +997,7 @@ final class Aerospike
      *
      * @return int
      */
-    public function query($ns, $set, array $where, $record, array $select = [], array $options = [])
+    public function query($ns, $set, array $where, $record, array $select = null, array $options = null)
     {
     }
 
@@ -1030,7 +1030,7 @@ final class Aerospike
      *
      * @return int
      */
-    public function scan($ns, $set, $recordCallback, array $select = [], array $options = [])
+    public function scan($ns, $set, $recordCallback, array $select = null, array $options = null)
     {
     }
 
@@ -1089,7 +1089,7 @@ final class Aerospike
      *
      * @return int
      */
-    public function addIndex($ns, $set, $bin, $name, $indexType, $dataType, array $options = [])
+    public function addIndex($ns, $set, $bin, $name, $indexType, $dataType, array $options = null)
     {
     }
 
@@ -1100,7 +1100,7 @@ final class Aerospike
      *
      * @return int
      */
-    public function dropIndex($ns, $name, array $options = [])
+    public function dropIndex($ns, $name, array $options = null)
     {
     }
 
@@ -1122,7 +1122,7 @@ final class Aerospike
      *
      * @return int
      */
-    public function info($request, &$response, array $host = [], array $options = [])
+    public function info($request, &$response, array $host = null, array $options = null)
     {
     }
 
@@ -1133,7 +1133,7 @@ final class Aerospike
      *
      * @return array
      */
-    public function infoMany($request, array $config = [], array $options = [])
+    public function infoMany($request, array $config = null, array $options = null)
     {
     }
 
@@ -1160,7 +1160,7 @@ final class Aerospike
      *
      * @return int
      */
-    public function createRole($role, array $privileges, array $options = [])
+    public function createRole($role, array $privileges, array $options = null)
     {
     }
 
@@ -1171,7 +1171,7 @@ final class Aerospike
      *
      * @return int
      */
-    public function grantPrivileges($role, array $privileges, array $options = [])
+    public function grantPrivileges($role, array $privileges, array $options = null)
     {
     }
 
@@ -1182,7 +1182,7 @@ final class Aerospike
      *
      * @return int
      */
-    public function revokePrivileges($role, array $privileges, array $options = [])
+    public function revokePrivileges($role, array $privileges, array $options = null)
     {
     }
 
@@ -1193,7 +1193,7 @@ final class Aerospike
      *
      * @return int
      */
-    public function queryRole($role, array &$privileges, array $options = [])
+    public function queryRole($role, array &$privileges, array $options = null)
     {
     }
 
@@ -1203,7 +1203,7 @@ final class Aerospike
      *
      * @return int
      */
-    public function queryRoles(array &$roles, array $options = [])
+    public function queryRoles(array &$roles, array $options = null)
     {
     }
 
@@ -1213,7 +1213,7 @@ final class Aerospike
      *
      * @return int
      */
-    public function dropRole($role, array $options = [])
+    public function dropRole($role, array $options = null)
     {
     }
 
@@ -1225,7 +1225,7 @@ final class Aerospike
      *
      * @return int
      */
-    public function createUser($user, $password, array $roles, array $options = [])
+    public function createUser($user, $password, array $roles, array $options = null)
     {
     }
 
@@ -1236,7 +1236,7 @@ final class Aerospike
      *
      * @return int
      */
-    public function setPassword($user, $password, array $options = [])
+    public function setPassword($user, $password, array $options = null)
     {
     }
 
@@ -1247,7 +1247,7 @@ final class Aerospike
      *
      * @return int
      */
-    public function changePassword($user, $password, array $options = [])
+    public function changePassword($user, $password, array $options = null)
     {
     }
 
@@ -1258,7 +1258,7 @@ final class Aerospike
      *
      * @return int
      */
-    public function grantRoles($user, array $roles, array $options = [])
+    public function grantRoles($user, array $roles, array $options = null)
     {
     }
 
@@ -1269,7 +1269,7 @@ final class Aerospike
      *
      * @return int
      */
-    public function revokeRoles($user, array $roles, array $options = [])
+    public function revokeRoles($user, array $roles, array $options = null)
     {
     }
 
@@ -1280,7 +1280,7 @@ final class Aerospike
      *
      * @return int
      */
-    public function queryUser($user, array &$roles, array $options = [])
+    public function queryUser($user, array &$roles, array $options = null)
     {
     }
 
@@ -1290,7 +1290,7 @@ final class Aerospike
      *
      * @return int
      */
-    public function queryUsers(array &$roles, array $options = [])
+    public function queryUsers(array &$roles, array $options = null)
     {
     }
 
@@ -1300,7 +1300,7 @@ final class Aerospike
      *
      * @return int
      */
-    public function dropUser($user, array $options = [])
+    public function dropUser($user, array $options = null)
     {
     }
 
@@ -1320,7 +1320,7 @@ final class Aerospike
      *
      * @return int
      */
-    public function getMetadata(array $key, array &$metadata, array $options = [])
+    public function getMetadata(array $key, array &$metadata, array $options = null)
     {
     }
 
@@ -1379,7 +1379,7 @@ final class Aerospike
      *
      * @return int
      */
-    public function listInsert(array $key, $bin, $index, $value, array $options = [])
+    public function listInsert(array $key, $bin, $index, $value, array $options = null)
     {
     }
 
@@ -1394,7 +1394,7 @@ final class Aerospike
      *
      * @return int
      */
-    public function listSet(array $key, $bin, $index, $value, array $options = [])
+    public function listSet(array $key, $bin, $index, $value, array $options = null)
     {
     }
 
@@ -1408,7 +1408,7 @@ final class Aerospike
      *
      * @return int
      */
-    public function listMerge(array $key, $bin, array $items, array $options = [])
+    public function listMerge(array $key, $bin, array $items, array $options = null)
     {
     }
 
@@ -1422,7 +1422,7 @@ final class Aerospike
      *
      * @return int
      */
-    public function listSize(array $key, $bin, &$count, array $options = [])
+    public function listSize(array $key, $bin, &$count, array $options = null)
     {
     }
 
@@ -1435,7 +1435,7 @@ final class Aerospike
      *
      * @return int
      */
-    public function listClear(array $key, $bin, array $options = [])
+    public function listClear(array $key, $bin, array $options = null)
     {
     }
 
@@ -1450,7 +1450,7 @@ final class Aerospike
      *
      * @return int
      */
-    public function listTrim(array $key, $bin, $index, $count, array $options = [])
+    public function listTrim(array $key, $bin, $index, $count, array $options = null)
     {
     }
 
@@ -1465,7 +1465,7 @@ final class Aerospike
      *
      * @return int
      */
-    public function listInsertItems(array $key, $bin, $index, array $items, array $options = [])
+    public function listInsertItems(array $key, $bin, $index, array $items, array $options = null)
     {
     }
 
@@ -1480,7 +1480,7 @@ final class Aerospike
      *
      * @return int
      */
-    public function listGet(array $key, $bin, $index, array &$elements, array $options = [])
+    public function listGet(array $key, $bin, $index, array &$elements, array $options = null)
     {
     }
 
@@ -1494,7 +1494,7 @@ final class Aerospike
      *
      * @return int
      */
-    public function listAppend(array $key, $bin, $value, array $options = [])
+    public function listAppend(array $key, $bin, $value, array $options = null)
     {
     }
 
@@ -1510,7 +1510,7 @@ final class Aerospike
      *
      * @return int
      */
-    public function listGetRange(array $key, $bin, $index, $count, array &$elements, array $options = [])
+    public function listGetRange(array $key, $bin, $index, $count, array &$elements, array $options = null)
     {
     }
 
@@ -1527,7 +1527,7 @@ final class Aerospike
      *
      * @return int
      */
-    public function listPop(array $key, $bin, $index, array &$elements, array $options = [])
+    public function listPop(array $key, $bin, $index, array &$elements, array $options = null)
     {
     }
 
@@ -1543,7 +1543,7 @@ final class Aerospike
      *
      * @return int
      */
-    public function listPopRange(array $key, $bin, $index, $count, array &$elements, array $options = [])
+    public function listPopRange(array $key, $bin, $index, $count, array &$elements, array $options = null)
     {
     }
 
@@ -1558,7 +1558,7 @@ final class Aerospike
      *
      * @return int
      */
-    public function listRemove(array $key, $bin, $index, $count, array $options = [])
+    public function listRemove(array $key, $bin, $index, $count, array $options = null)
     {
     }
 
@@ -1573,7 +1573,7 @@ final class Aerospike
      *
      * @return int
      */
-    public function listRemoveRange(array $key, $bin, $index, $count, array $options = [])
+    public function listRemoveRange(array $key, $bin, $index, $count, array $options = null)
     {
     }
 }
