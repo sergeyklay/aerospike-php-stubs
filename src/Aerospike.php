@@ -747,20 +747,48 @@ final class Aerospike
     }
 
     /**
-     * @param callable $callable
+     * Sets a serialization handler for unsupported types.
+     *
+     * The callback method must follow the signature:
+     * <code>
+     * public function string aerospike_serialize ( mixed $value )
+     * </code>
+     *
+     * Example:
+     * <code>
+     * Aerospike::setSerializer(function ($val) {
+     *     return gzcompress(json_encode($val));
+     * });
+     * </code>
+     *
+     * @param callable $callable A callback function invoked for each value of an unsupported type.
      *
      * @return void
      */
-    public static function setSerializer($callable)
+    public static function setSerializer(callable $callable)
     {
     }
 
     /**
-     * @param callable $callable
+     * Sets a deserialization handler for unsupported types.
+     *
+     * The callback method must follow the signature:
+     * <code>
+     * public function string aerospike_deserialize ( mixed $value )
+     * </code>
+     *
+     * Example:
+     * <code>
+     * Aerospike::setDeserializer(function ($val) {
+     *     return json_decode(gzuncompress($val));
+     * });
+     * </code>
+     *
+     * @param callable $callable A callback function invoked for each value of an unsupported type.
      *
      * @return void
      */
-    public static function setDeserializer($callable)
+    public static function setDeserializer(callable $callable)
     {
     }
 
