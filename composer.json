@@ -2,7 +2,7 @@
   "name": "sergeyklay/aerospike-php-stubs",
   "type": "library",
   "description": "The most complete Aerospike PHP stubs which allows autocomplete in modern IDEs",
-  "keywords": ["Aerospike" ,"Stub", "IDE", "Zend Studio", "PhpStorm", "Netbeans", "Netbeans", "Eclipse", "autocomplete"],
+  "keywords": ["Aerospike" ,"Stub", "IDE", "Zend Studio", "PhpStorm", "Netbeans", "Eclipse", "autocomplete"],
   "license": "MIT",
   "authors": [
     {
@@ -11,7 +11,7 @@
     },
     {
       "name": "Serghei Iakovlev",
-      "email": "me@klay.me",
+      "email": "serghei@phalconphp.com",
       "homepage": "https://klay.me/"
     }
   ],
@@ -27,7 +27,6 @@
       "": "src"
     }
   },
-  "minimum-stability": "dev",
   "extra": {
     "branch-alias": {
       "dev-master": "3.4.x-dev"
