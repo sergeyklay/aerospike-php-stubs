@@ -442,19 +442,19 @@ final class Aerospike
      *             $lvl_str = 'ERROR';
      *             break;
      *         case Aerospike::LOG_LEVEL_WARN:
-     *             $lvl_str = 'ERROR';
+     *             $lvl_str = 'WARNING';
      *             break;
      *         case Aerospike::LOG_LEVEL_INFO:
-     *             $lvl_str = 'ERROR';
+     *             $lvl_str = 'INFO';
      *             break;
      *         case Aerospike::LOG_LEVEL_DEBUG:
-     *             $lvl_str = 'ERROR';
+     *             $lvl_str = 'DEBUG';
      *             break;
      *         case Aerospike::LOG_LEVEL_TRACE:
-     *             $lvl_str = 'ERROR';
+     *             $lvl_str = 'TRACE';
      *             break;
      *         default:
-     *             $lvl_str = '???';
+     *             $lvl_str = 'UNKNOWN';
      *     }
      *     error_log("[$lvl_str] in $function at $file:$line");
      * });
@@ -464,7 +464,7 @@ final class Aerospike
      *
      * @return void
      */
-    public function setLogHandler($logHandler)
+    public function setLogHandler(callable $logHandler)
     {
     }
 
