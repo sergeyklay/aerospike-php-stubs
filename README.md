@@ -1,15 +1,15 @@
 # Aerospike PHP Stubs
 
-[![Software License](https://img.shields.io/packagist/l/sergeyklay/aerospike-php-stubs.svg?style=flat-square)](LICENSE)
-[![Total Downloads](https://img.shields.io/packagist/dt/sergeyklay/aerospike-php-stubs.svg?style=flat-square)](https://packagist.org/packages/sergeyklay/aerospike-php-stubs)
+[![Software License](https://img.shields.io/packagist/l/sergeyklay/aerospike-php-stubs.svg?style=flat-square)][:license:]
+[![Total Downloads](https://img.shields.io/packagist/dt/sergeyklay/aerospike-php-stubs.svg?style=flat-square)][:packagist:]
 
 ![screenshot](http://i.imgur.com/55EKJIU.png "Screenshot")
 
 When working with PHP Aerospike class may crop up some difficulties when to use syntax highlighting or code autocompletion.
 This repo provide the most complete Aerospike PHP stubs which allows autocomplete in modern IDEs.
 
-Grabbed by using [Reflection](http://php.net/manual/en/book.reflection.php) from `aerospike.so`
-and [Aerospike doc](https://github.com/aerospike/aerospike-client-php/blob/master/doc/aerospike.md)
+Grabbed by using [Reflection][:reflection:] from `aerospike.so`
+and [Aerospike doc][:doc:]
 
 ## Install
 
@@ -39,5 +39,10 @@ Setup your IDE.
 
 ## License
 
-Aerospike PHP Stubs is open-sourced software licensed under the [MIT](LICENSE).
+Aerospike PHP Stubs is open-sourced software licensed under the [MIT][:license:].
 © Serghei Iakovlev and contributors
+
+[:doc:]: https://github.com/aerospike/aerospike-client-php/blob/master/doc/aerospike.md
+[:reflection:]: http://php.net/manual/en/book.reflection.php
+[:packagist:]: https://packagist.org/packages/sergeyklay/aerospike-php-stubs
+[:license:]: https://github.com/sergeyklay/aerospike-php-stubs/blob/master/LICENSE

@@ -7,53 +7,57 @@
  *
  * Default INI entries is:
  *
- *   aerospike.nesting_depth = 3
- *   aerospike.connect_timeout = 1000
- *   aerospike.read_timeout = 1000
- *   aerospike.write_timeout = 1000
- *   aerospike.log_path =
- *   aerospike.log_level =
- *   aerospike.serializer = php
- *   aerospike.udf.lua_system_path = /usr/local/aerospike/lua
- *   aerospike.udf.lua_user_path = /usr/local/aerospike/usr-lua
- *   aerospike.key_policy = 0
- *   aerospike.key_gen = 0
- *   aerospike.shm.use = false
- *   aerospike.shm.key = 0xA5000000
- *   aerospike.shm.max_nodes = 16
- *   aerospike.shm.max_namespaces = 8
- *   aerospike.shm.takeover_threshold_sec = 30
- *   aerospike.use_batch_direct = false
- *   aerospike.max_threads = 300
- *   aerospike.thread_pool_size = 16
- *   aerospike.compression_threshold = 0
+ * <code>
+ * aerospike.connect_timeout = 1000
+ * aerospike.read_timeout = 1000
+ * aerospike.write_timeout = 1000
+ * aerospike.key_policy = 0
+ * aerospike.serializer = php
+ * aerospike.udf.lua_system_path = /usr/local/aerospike/lua
+ * aerospike.udf.lua_user_path = /usr/local/aerospike/usr-lua
+ * aerospike.shm.use = false
+ * aerospike.shm.key = 0xA5000000
+ * aerospike.shm.max_nodes = 16
+ * aerospike.shm.max_namespaces = 8
+ * aerospike.shm.takeover_threshold_sec = 30
+ * aerospike.use_batch_direct = 0
+ * aerospike.compression_threshold = 0
+ * aerospike.max_threads = 300
+ * aerospike.thread_pool_size = 16
+ * aerospike.nesting_depth = 3
+ * aerospike.log_path = NULL
+ * aerospike.log_level = NULL
+ * aerospike.key_gen = 0
+ * </code>
  *
  * @copyright (c) 2015-2016 Serghei Iakovlev
  * @link      https://github.com/aerospike/aerospike-client-php
- * @author    Serghei Iakovlev <me@klay.me>
+ * @author    Serghei Iakovlev <serghei@phalconphp.com>
  * @license   MIT
  */
 final class Aerospike
 {
     // Options can be assigned values that modify default behavior
-    const OPT_CONNECT_TIMEOUT     = 1;  // value in milliseconds (default: 1000)
-    const OPT_READ_TIMEOUT        = 2;  // value in milliseconds (default: 1000)
-    const OPT_WRITE_TIMEOUT       = 3;  // value in milliseconds (default: 1000)
-    const OPT_POLICY_RETRY        = 4;  // set to a Aerospike::POLICY_RETRY_* value
-    const OPT_POLICY_EXISTS       = 5;  // set to a Aerospike::POLICY_EXISTS_* value
-    const OPT_SERIALIZER          = 6;  // set the unsupported type handler
-    const OPT_SCAN_PRIORITY       = 7;  // set to a Aerospike::SCAN_PRIORITY_* value
-    const OPT_SCAN_PERCENTAGE     = 8;  // integer value 1-100 (default: 100)
-    const OPT_SCAN_CONCURRENTLY   = 9;  // boolean value (default: false)
-    const OPT_SCAN_NOBINS         = 10; // boolean value (default: false)
-    const OPT_SCAN_INCLUDELDT     = 11; // boolean value (default: false)
-    const OPT_POLICY_KEY          = 12; // records store the digest unique ID, optionally also its (ns,set,key) inputs
-    const OPT_POLICY_GEN          = 13; // set to [Aerospike::POLICY_GEN_* [, $gen_value ]]
-    const OPT_POLICY_REPLICA      = 14; // set to one of Aerospike::POLICY_REPLICA_*
-    const OPT_POLICY_CONSISTENCY  = 15; // set to one of Aerospike::POLICY_CONSISTENCY_*
-    const OPT_POLICY_COMMIT_LEVEL = 16; // set to one of Aerospike::POLICY_COMMIT_LEVEL_*
-    const OPT_TTL                 = 17; // record ttl, value in seconds
-    const USE_BATCH_DIRECT        = 18; // batch-direct or batch-index protocol (default: 0)
+    const OPT_CONNECT_TIMEOUT       = 1;  // value in milliseconds (default: 1000)
+    const OPT_READ_TIMEOUT          = 2;  // value in milliseconds (default: 1000)
+    const OPT_WRITE_TIMEOUT         = 3;  // value in milliseconds (default: 1000)
+    const OPT_POLICY_RETRY          = 4;  // set to a Aerospike::POLICY_RETRY_* value
+    const OPT_POLICY_EXISTS         = 5;  // set to a Aerospike::POLICY_EXISTS_* value
+    const OPT_SERIALIZER            = 6;  // set the unsupported type handler
+    const OPT_SCAN_PRIORITY         = 7;  // set to a Aerospike::SCAN_PRIORITY_* value
+    const OPT_SCAN_PERCENTAGE       = 8;  // integer value 1-100 (default: 100)
+    const OPT_SCAN_CONCURRENTLY     = 9;  // boolean value (default: false)
+    const OPT_SCAN_NOBINS           = 10; // boolean value (default: false)
+    const OPT_SCAN_INCLUDELDT       = 11; // boolean value (default: false)
+    const OPT_POLICY_KEY            = 12; // records store the digest unique ID, optionally also its (ns,set,key) inputs
+    const OPT_POLICY_GEN            = 13; // set to [Aerospike::POLICY_GEN_* [, $gen_value ]]
+    const OPT_POLICY_REPLICA        = 14; // set to one of Aerospike::POLICY_REPLICA_*
+    const OPT_POLICY_CONSISTENCY    = 15; // set to one of Aerospike::POLICY_CONSISTENCY_*
+    const OPT_POLICY_COMMIT_LEVEL   = 16; // set to one of Aerospike::POLICY_COMMIT_LEVEL_*
+    const OPT_TTL                   = 17; // record ttl, value in seconds
+    const USE_BATCH_DIRECT          = 18; // batch-direct or batch-index protocol (default: 0)
+    const COMPRESSION_THRESHOLD     = 19; // minimum record size beyond which it is compressed and sent to the server
+    const OPT_POLICY_DURABLE_DELETE = 20; // boolean value (default: false)
 
     // UDF types
     const UDF_TYPE_LUA = 0;
@@ -62,8 +66,7 @@ final class Aerospike
     // Set OPT_SERIALIZER to one of the following:
     const SERIALIZER_NONE = 0; // throw an error when serialization is required
     const SERIALIZER_PHP  = 1; // use the PHP serialize/unserialize functions (default)
-    const SERIALIZER_JSON = 2;
-    const SERIALIZER_USER = 3; // use a user-defined serializer
+    const SERIALIZER_USER = 2; // use a user-defined serializer
 
     /**
      * Scan status is undefined
@@ -94,10 +97,11 @@ final class Aerospike
     const SCAN_STATUS_COMPLETED = 3;
 
     // Scan priority
-    const SCAN_PRIORITY_AUTO   = 0;
-    const SCAN_PRORITY_LOW     = 1;
-    const SCAN_PRIORITY_MEDIUM = 2;
-    const SCAN_PRIORITY_HIGH   = 3;
+    // OPT_SCAN_PRIORITY can be set to one of the following:
+    const SCAN_PRIORITY_AUTO   = 0; // the cluster will auto adjust the scan priority
+    const SCAN_PRIORITY_LOW    = 1; // low priority scan
+    const SCAN_PRIORITY_MEDIUM = 2; // medium priority scan
+    const SCAN_PRIORITY_HIGH   = 3; // high priority scan
 
     // Security role privileges
     const PRIV_USER_ADMIN     = 0;  // user can edit/remove other users
@@ -263,8 +267,6 @@ final class Aerospike
     const JOB_STATUS_INPROGRESS = 1; // the job is currently running.
     const JOB_STATUS_COMPLETED  = 2; // the job completed successfully.
 
-    const COMPRESSION_THRESHOLD = 19;
-
     /**
      * @var int
      */
@@ -294,7 +296,7 @@ final class Aerospike
      *                          Aerospike::OPT_POLICY_RETRY, Aerospike::OPT_POLICY_COMMIT_LEVEL
      *                          Aerospike::OPT_POLICY_CONSISTENCY, Aerospike::OPT_POLICY_REPLICA [Optional]
      */
-    public function __construct(array $config, $persistent = true, array $options = [])
+    public function __construct(array $config, $persistent = true, array $options = null)
     {
     }
 
@@ -442,19 +444,19 @@ final class Aerospike
      *             $lvl_str = 'ERROR';
      *             break;
      *         case Aerospike::LOG_LEVEL_WARN:
-     *             $lvl_str = 'ERROR';
+     *             $lvl_str = 'WARNING';
      *             break;
      *         case Aerospike::LOG_LEVEL_INFO:
-     *             $lvl_str = 'ERROR';
+     *             $lvl_str = 'INFO';
      *             break;
      *         case Aerospike::LOG_LEVEL_DEBUG:
-     *             $lvl_str = 'ERROR';
+     *             $lvl_str = 'DEBUG';
      *             break;
      *         case Aerospike::LOG_LEVEL_TRACE:
-     *             $lvl_str = 'ERROR';
+     *             $lvl_str = 'TRACE';
      *             break;
      *         default:
-     *             $lvl_str = '???';
+     *             $lvl_str = 'UNKNOWN';
      *     }
      *     error_log("[$lvl_str] in $function at $file:$line");
      * });
@@ -464,7 +466,7 @@ final class Aerospike
      *
      * @return void
      */
-    public function setLogHandler($logHandler)
+    public function setLogHandler(callable $logHandler)
     {
     }
 
@@ -544,7 +546,7 @@ final class Aerospike
      *
      * @return int
      */
-    public function put(array $key, array $bins, $ttl = 0, array $options = [])
+    public function put(array $key, array $bins, $ttl = 0, array $options = null)
     {
     }
 
@@ -571,7 +573,7 @@ final class Aerospike
      *
      * @return int
      */
-    public function get(array $key, array &$record, array $select = [], array $options = [])
+    public function get(array $key, array &$record, array $select = null, array $options = null)
     {
     }
 
@@ -594,7 +596,7 @@ final class Aerospike
      *                        Aerospike::OPT_POLICY_CONSISTENCY, Aerospike::OPT_POLICY_REPLICA [Optional]
      * @return int
      */
-    public function exists(array $key, array &$metadata, array $options = [])
+    public function exists(array $key, array &$metadata, array $options = null)
     {
     }
 
@@ -623,7 +625,7 @@ final class Aerospike
      *
      * @return int
      */
-    public function touch(array $key, $ttl = 0, array $options = [])
+    public function touch(array $key, $ttl = 0, array $options = null)
     {
     }
 
@@ -647,18 +649,34 @@ final class Aerospike
      *
      * @return int
      */
-    public function remove(array $key, array $options = [])
+    public function remove(array $key, array $options = null)
     {
     }
 
     /**
-     * @param array $key
-     * @param array $bins
-     * @param array $options
+     * Removes a bin from a record.
+     *
+     * <code>
+     * $client = new Aerospike($config);
+     *
+     * $key = ['ns' => 'test', 'set' => 'users', 'key' => 1234];
+     * $options = [Aerospike::OPT_TTL => 3600];
+     *
+     * $status = $client->removeBin($key, ['age'], $options);
+     *
+     * var_dump($status);
+     * </code>
+     *
+     * @param array $key     The key for the record. An array with keys ['ns','set','key'] or ['ns','set','digest'].
+     * @param array $bins    The name of the bins to be removed from the record.
+     * @param array $options Options including:
+     *                       Aerospike::OPT_WRITE_TIMEOUT, Aerospike::OPT_POLICY_RETRY
+     *                       Aerospike::OPT_POLICY_KEY, Aerospike::OPT_POLICY_GEN,
+     *                       Aerospike::OPT_TTL, Aerospike::OPT_POLICY_COMMIT_LEVEL [Optional]
      *
      * @return int
      */
-    public function removeBin(array $key, array $bins, array $options = [])
+    public function removeBin(array $key, array $bins, array $options = null)
     {
     }
 
@@ -688,42 +706,104 @@ final class Aerospike
      *
      * @return int
      */
-    public function increment(array $key, $bin, $offset, array $options = [])
+    public function increment(array $key, $bin, $offset, array $options = null)
     {
     }
 
     /**
-     * @param array  $key
-     * @param string $bin
-     * @param string $value
-     * @param array  $options
+     * Appends a string to the string value in a bin.
+     *
+     * <code>
+     * $client = new Aerospike($config);
+     *
+     * $key = $client->initKey('test', 'users', 1234);
+     * $options = [Aerospike::OPT_TTL => 3600];
+     *
+     * $status = $client->append($key, 'name', ' Ph.D.', $options);
+     *
+     * var_dump($status);
+     * </code>
+     *
+     * @param array  $key     The key under which the record can be found.
+     *                        An array with keys ['ns','set','key'] or ['ns','set','digest'].
+     * @param string $bin     The name of the bin in which we have a numeric value.
+     * @param string $value   The string to append to the string value in the bin.
+     * @param array  $options Options including:
+     *                        Aerospike::OPT_WRITE_TIMEOUT, Aerospike::OPT_TTL
+     *                        Aerospike::OPT_POLICY_RETRY, Aerospike::OPT_POLICY_KEY,
+     *                        Aerospike::OPT_POLICY_GEN, Aerospike::OPT_POLICY_REPLICA,
+     *                        Aerospike::OPT_POLICY_CONSISTENCY, Aerospike::OPT_POLICY_COMMIT_LEVEL [Optional]
      *
      * @return int
      */
-    public function append(array $key, $bin, $value, array $options = [])
+    public function append(array $key, $bin, $value, array $options = null)
     {
     }
 
     /**
-     * @param array  $key
-     * @param string $bin
-     * @param string $value
-     * @param array  $options
+     * Prepends a string to the string value in a bin.
+     *
+     * <code>
+     * $client = new Aerospike($config);
+     *
+     * $key = $client->initKey('test', 'users', 1234);
+     * $options = [Aerospike::OPT_TTL => 3600];
+     *
+     * $status = $client->prepend($key, 'name', '*', $options);
+     *
+     * var_dump($status);
+     * </code>
+     *
+     * @param array  $key     The key under which the record can be found.
+     *                        An array with keys ['ns','set','key'] or ['ns','set','digest'].
+     * @param string $bin     The name of the bin in which we have a numeric value.
+     * @param string $value   The string to prepend to the string value in the bin.
+     * @param array  $options Options including:
+     *                        Aerospike::OPT_WRITE_TIMEOUT, Aerospike::OPT_TTL
+     *                        Aerospike::OPT_POLICY_RETRY, Aerospike::OPT_POLICY_KEY,
+     *                        Aerospike::OPT_POLICY_GEN, Aerospike::OPT_POLICY_REPLICA,
+     *                        Aerospike::OPT_POLICY_CONSISTENCY, Aerospike::OPT_POLICY_COMMIT_LEVEL [Optional]
      *
      * @return int
      */
-    public function prepend(array $key, $bin, $value, array $options = [])
+    public function prepend(array $key, $bin, $value, array $options = null)
     {
     }
 
     /**
-     * @param array $key
-     * @param array $operations
-     * @param array $returned
+     * Multiple operations on a single record.
+     *
+     * <code>
+     * $client = new Aerospike($config);
+     *
+     * $key = $client->initKey('test', 'users', 1234);
+     * $operations = [
+     *     ['op' => Aerospike::OPERATOR_APPEND, 'bin' => 'name', 'val' => ' Ph.D.'],
+     *     ['op' => Aerospike::OPERATOR_INCR, 'bin' => 'age', 'val' => 1],
+     *     ['op' => Aerospike::OPERATOR_READ, 'bin' => 'age'],
+     * ];
+     *
+     * $options = [Aerospike::OPT_TTL => 600];
+     * $status = $client->prepend($key, $operations, $returned, $options);
+     *
+     * var_dump($status, $returned);
+     * </code>
+     *
+     * @param array $key        The key identifying the record.
+     *                          An array with keys ['ns','set','key'] or ['ns','set','digest'].
+     * @param array $operations An array of one or more per-bin operations.
+     * @param array $returned   An array of bins retrieved by read operations.
+     *                          If multiple operations exist for a specific bin name, the last operation
+     *                          will be the one placed as the value.
+     * @param array  $options Options including:
+     *                        Aerospike::OPT_WRITE_TIMEOUT, Aerospike::OPT_TTL
+     *                        Aerospike::OPT_POLICY_RETRY, Aerospike::OPT_POLICY_KEY,
+     *                        Aerospike::OPT_POLICY_GEN, Aerospike::OPT_POLICY_REPLICA,
+     *                        Aerospike::OPT_POLICY_CONSISTENCY, Aerospike::OPT_POLICY_COMMIT_LEVEL [Optional]
      *
      * @return int
      */
-    public function operate(array $key, array $operations, array &$returned = [])
+    public function operate(array $key, array $operations, array &$returned = null, array $options = null)
     {
     }
 
@@ -742,25 +822,53 @@ final class Aerospike
      *
      * @return int
      */
-    public function operateOrdered(array $key, array $operations, array &$returned = [], array $options = [])
+    public function operateOrdered(array $key, array $operations, array &$returned = null, array $options = null)
     {
     }
 
     /**
-     * @param callable $callable
+     * Sets a serialization handler for unsupported types.
+     *
+     * The callback method must follow the signature:
+     * <code>
+     * public function string aerospike_serialize ( mixed $value )
+     * </code>
+     *
+     * Example:
+     * <code>
+     * Aerospike::setSerializer(function ($val) {
+     *     return gzcompress(json_encode($val));
+     * });
+     * </code>
+     *
+     * @param callable $callable A callback function invoked for each value of an unsupported type.
      *
      * @return void
      */
-    public static function setSerializer($callable)
+    public static function setSerializer(callable $callable)
     {
     }
 
     /**
-     * @param callable $callable
+     * Sets a deserialization handler for unsupported types.
+     *
+     * The callback method must follow the signature:
+     * <code>
+     * public function string aerospike_deserialize ( mixed $value )
+     * </code>
+     *
+     * Example:
+     * <code>
+     * Aerospike::setDeserializer(function ($val) {
+     *     return json_decode(gzuncompress($val));
+     * });
+     * </code>
+     *
+     * @param callable $callable A callback function invoked for each value of an unsupported type.
      *
      * @return void
      */
-    public static function setDeserializer($callable)
+    public static function setDeserializer(callable $callable)
     {
     }
 
@@ -772,7 +880,7 @@ final class Aerospike
      *
      * @return int
      */
-    public function getMany(array $keys, array &$records, array $filter = [], array $options = [])
+    public function getMany(array $keys, array &$records, array $filter = null, array $options = null)
     {
     }
 
@@ -783,7 +891,7 @@ final class Aerospike
      *
      * @return int
      */
-    public function existsMany(array $keys, array &$metadata, array $options = [])
+    public function existsMany(array $keys, array &$metadata, array $options = null)
     {
     }
 
@@ -837,7 +945,7 @@ final class Aerospike
      *
      * @return int
      */
-    public function apply(array $key, $module, $function, array $args = [], &$returned = null, array $options = [])
+    public function apply(array $key, $module, $function, array $args = null, &$returned = null, array $options = null)
     {
     }
 
@@ -853,7 +961,7 @@ final class Aerospike
      *
      * @return int
      */
-    public function aggregate($ns, $set, array $where, $module, $function, array $args, &$returned = null, array $options = [])
+    public function aggregate($ns, $set, array $where, $module, $function, array $args, &$returned = null, array $options = null)
     {
     }
 
@@ -868,7 +976,7 @@ final class Aerospike
      *
      * @return int
      */
-    public function scanApply($ns, $set, $module, $function, array $args, &$scan_id, array $options = [])
+    public function scanApply($ns, $set, $module, $function, array $args, &$scan_id, array $options = null)
     {
     }
 
@@ -912,7 +1020,7 @@ final class Aerospike
      *
      * @return int
      */
-    public function queryApply($ns, $set, array $where, $module, $function, array $args, &$job_id, array $options = [])
+    public function queryApply($ns, $set, array $where, $module, $function, array $args, &$job_id, array $options = null)
     {
     }
 
@@ -924,7 +1032,7 @@ final class Aerospike
      *
      * @return int
      */
-    public function scanInfo($scan_id, array &$info, array $options = [])
+    public function scanInfo($scan_id, array &$info, array $options = null)
     {
     }
 
@@ -954,7 +1062,7 @@ final class Aerospike
      *
      * @return int
      */
-    public function jobInfo($job_id, array &$info, array $options = [])
+    public function jobInfo($job_id, array &$info, array $options = null)
     {
 
     }
@@ -969,7 +1077,7 @@ final class Aerospike
      *
      * @return int
      */
-    public function query($ns, $set, array $where, $record, array $select = [], array $options = [])
+    public function query($ns, $set, array $where, $record, array $select = null, array $options = null)
     {
     }
 
@@ -1002,7 +1110,7 @@ final class Aerospike
      *
      * @return int
      */
-    public function scan($ns, $set, $recordCallback, array $select = [], array $options = [])
+    public function scan($ns, $set, $recordCallback, array $select = null, array $options = null)
     {
     }
 
@@ -1061,7 +1169,7 @@ final class Aerospike
      *
      * @return int
      */
-    public function addIndex($ns, $set, $bin, $name, $indexType, $dataType, array $options = [])
+    public function addIndex($ns, $set, $bin, $name, $indexType, $dataType, array $options = null)
     {
     }
 
@@ -1072,7 +1180,7 @@ final class Aerospike
      *
      * @return int
      */
-    public function dropIndex($ns, $name, array $options = [])
+    public function dropIndex($ns, $name, array $options = null)
     {
     }
 
@@ -1094,7 +1202,7 @@ final class Aerospike
      *
      * @return int
      */
-    public function info($request, &$response, array $host = [], array $options = [])
+    public function info($request, &$response, array $host = null, array $options = null)
     {
     }
 
@@ -1105,7 +1213,7 @@ final class Aerospike
      *
      * @return array
      */
-    public function infoMany($request, array $config = [], array $options = [])
+    public function infoMany($request, array $config = null, array $options = null)
     {
     }
 
@@ -1132,7 +1240,7 @@ final class Aerospike
      *
      * @return int
      */
-    public function createRole($role, array $privileges, array $options = [])
+    public function createRole($role, array $privileges, array $options = null)
     {
     }
 
@@ -1143,7 +1251,7 @@ final class Aerospike
      *
      * @return int
      */
-    public function grantPrivileges($role, array $privileges, array $options = [])
+    public function grantPrivileges($role, array $privileges, array $options = null)
     {
     }
 
@@ -1154,7 +1262,7 @@ final class Aerospike
      *
      * @return int
      */
-    public function revokePrivileges($role, array $privileges, array $options = [])
+    public function revokePrivileges($role, array $privileges, array $options = null)
     {
     }
 
@@ -1165,7 +1273,7 @@ final class Aerospike
      *
      * @return int
      */
-    public function queryRole($role, array &$privileges, array $options = [])
+    public function queryRole($role, array &$privileges, array $options = null)
     {
     }
 
@@ -1175,7 +1283,7 @@ final class Aerospike
      *
      * @return int
      */
-    public function queryRoles(array &$roles, array $options = [])
+    public function queryRoles(array &$roles, array $options = null)
     {
     }
 
@@ -1185,7 +1293,7 @@ final class Aerospike
      *
      * @return int
      */
-    public function dropRole($role, array $options = [])
+    public function dropRole($role, array $options = null)
     {
     }
 
@@ -1197,7 +1305,7 @@ final class Aerospike
      *
      * @return int
      */
-    public function createUser($user, $password, array $roles, array $options = [])
+    public function createUser($user, $password, array $roles, array $options = null)
     {
     }
 
@@ -1208,7 +1316,7 @@ final class Aerospike
      *
      * @return int
      */
-    public function setPassword($user, $password, array $options = [])
+    public function setPassword($user, $password, array $options = null)
     {
     }
 
@@ -1219,7 +1327,7 @@ final class Aerospike
      *
      * @return int
      */
-    public function changePassword($user, $password, array $options = [])
+    public function changePassword($user, $password, array $options = null)
     {
     }
 
@@ -1230,7 +1338,7 @@ final class Aerospike
      *
      * @return int
      */
-    public function grantRoles($user, array $roles, array $options = [])
+    public function grantRoles($user, array $roles, array $options = null)
     {
     }
 
@@ -1241,7 +1349,7 @@ final class Aerospike
      *
      * @return int
      */
-    public function revokeRoles($user, array $roles, array $options = [])
+    public function revokeRoles($user, array $roles, array $options = null)
     {
     }
 
@@ -1252,7 +1360,7 @@ final class Aerospike
      *
      * @return int
      */
-    public function queryUser($user, array &$roles, array $options = [])
+    public function queryUser($user, array &$roles, array $options = null)
     {
     }
 
@@ -1262,7 +1370,7 @@ final class Aerospike
      *
      * @return int
      */
-    public function queryUsers(array &$roles, array $options = [])
+    public function queryUsers(array &$roles, array $options = null)
     {
     }
 
@@ -1272,7 +1380,7 @@ final class Aerospike
      *
      * @return int
      */
-    public function dropUser($user, array $options = [])
+    public function dropUser($user, array $options = null)
     {
     }
 
@@ -1292,7 +1400,7 @@ final class Aerospike
      *
      * @return int
      */
-    public function getMetadata(array $key, array &$metadata, array $options = [])
+    public function getMetadata(array $key, array &$metadata, array $options = null)
     {
     }
 
@@ -1351,7 +1459,7 @@ final class Aerospike
      *
      * @return int
      */
-    public function listInsert(array $key, $bin, $index, $value, array $options = [])
+    public function listInsert(array $key, $bin, $index, $value, array $options = null)
     {
     }
 
@@ -1366,7 +1474,7 @@ final class Aerospike
      *
      * @return int
      */
-    public function listSet(array $key, $bin, $index, $value, array $options = [])
+    public function listSet(array $key, $bin, $index, $value, array $options = null)
     {
     }
 
@@ -1380,7 +1488,7 @@ final class Aerospike
      *
      * @return int
      */
-    public function listMerge(array $key, $bin, array $items, array $options = [])
+    public function listMerge(array $key, $bin, array $items, array $options = null)
     {
     }
 
@@ -1394,7 +1502,7 @@ final class Aerospike
      *
      * @return int
      */
-    public function listSize(array $key, $bin, &$count, array $options = [])
+    public function listSize(array $key, $bin, &$count, array $options = null)
     {
     }
 
@@ -1407,7 +1515,7 @@ final class Aerospike
      *
      * @return int
      */
-    public function listClear(array $key, $bin, array $options = [])
+    public function listClear(array $key, $bin, array $options = null)
     {
     }
 
@@ -1422,7 +1530,7 @@ final class Aerospike
      *
      * @return int
      */
-    public function listTrim(array $key, $bin, $index, $count, array $options = [])
+    public function listTrim(array $key, $bin, $index, $count, array $options = null)
     {
     }
 
@@ -1437,7 +1545,7 @@ final class Aerospike
      *
      * @return int
      */
-    public function listInsertItems(array $key, $bin, $index, array $items, array $options = [])
+    public function listInsertItems(array $key, $bin, $index, array $items, array $options = null)
     {
     }
 
@@ -1452,7 +1560,7 @@ final class Aerospike
      *
      * @return int
      */
-    public function listGet(array $key, $bin, $index, array &$elements, array $options = [])
+    public function listGet(array $key, $bin, $index, array &$elements, array $options = null)
     {
     }
 
@@ -1466,7 +1574,7 @@ final class Aerospike
      *
      * @return int
      */
-    public function listAppend(array $key, $bin, $value, array $options = [])
+    public function listAppend(array $key, $bin, $value, array $options = null)
     {
     }
 
@@ -1482,7 +1590,7 @@ final class Aerospike
      *
      * @return int
      */
-    public function listGetRange(array $key, $bin, $index, $count, array &$elements, array $options = [])
+    public function listGetRange(array $key, $bin, $index, $count, array &$elements, array $options = null)
     {
     }
 
@@ -1499,7 +1607,7 @@ final class Aerospike
      *
      * @return int
      */
-    public function listPop(array $key, $bin, $index, array &$elements, array $options = [])
+    public function listPop(array $key, $bin, $index, array &$elements, array $options = null)
     {
     }
 
@@ -1515,7 +1623,7 @@ final class Aerospike
      *
      * @return int
      */
-    public function listPopRange(array $key, $bin, $index, $count, array &$elements, array $options = [])
+    public function listPopRange(array $key, $bin, $index, $count, array &$elements, array $options = null)
     {
     }
 
@@ -1530,7 +1638,7 @@ final class Aerospike
      *
      * @return int
      */
-    public function listRemove(array $key, $bin, $index, $count, array $options = [])
+    public function listRemove(array $key, $bin, $index, $count, array $options = null)
     {
     }
 
@@ -1545,7 +1653,7 @@ final class Aerospike
      *
      * @return int
      */
-    public function listRemoveRange(array $key, $bin, $index, $count, array $options = [])
+    public function listRemoveRange(array $key, $bin, $index, $count, array $options = null)
     {
     }
 }
