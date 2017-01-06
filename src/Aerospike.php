@@ -30,7 +30,7 @@
  * aerospike.key_gen = 0
  * </code>
  *
- * @copyright (c) 2015-2016 Serghei Iakovlev
+ * @copyright (c) 2015-2017 Serghei Iakovlev
  * @link      https://github.com/aerospike/aerospike-client-php
  * @author    Serghei Iakovlev <serghei@phalconphp.com>
  * @license   MIT
