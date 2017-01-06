@@ -795,11 +795,11 @@ final class Aerospike
      * @param array $returned   An array of bins retrieved by read operations.
      *                          If multiple operations exist for a specific bin name, the last operation
      *                          will be the one placed as the value.
-     * @param array  $options Options including:
-     *                        Aerospike::OPT_WRITE_TIMEOUT, Aerospike::OPT_TTL
-     *                        Aerospike::OPT_POLICY_RETRY, Aerospike::OPT_POLICY_KEY,
-     *                        Aerospike::OPT_POLICY_GEN, Aerospike::OPT_POLICY_REPLICA,
-     *                        Aerospike::OPT_POLICY_CONSISTENCY, Aerospike::OPT_POLICY_COMMIT_LEVEL [Optional]
+     * @param array  $options   Options including:
+     *                          Aerospike::OPT_WRITE_TIMEOUT, Aerospike::OPT_TTL
+     *                          Aerospike::OPT_POLICY_RETRY, Aerospike::OPT_POLICY_KEY,
+     *                          Aerospike::OPT_POLICY_GEN, Aerospike::OPT_POLICY_REPLICA,
+     *                          Aerospike::OPT_POLICY_CONSISTENCY, Aerospike::OPT_POLICY_COMMIT_LEVEL [Optional]
      *
      * @return int
      */
@@ -814,7 +814,7 @@ final class Aerospike
      *                          An array with keys ['ns','set','key'] or ['ns','set','digest'].
      * @param array $operations An array of one or more per-bin operations.
      * @param array $returned   An indexed array of bins retrieved by read operations. [Optional]
-     * @param array  $options   Options including:
+     * @param array $options    Options including:
      *                          Aerospike::OPT_WRITE_TIMEOUT, Aerospike::OPT_TTL
      *                          Aerospike::OPT_POLICY_RETRY, Aerospike::OPT_POLICY_KEY,
      *                          Aerospike::OPT_POLICY_GEN, Aerospike::OPT_POLICY_REPLICA,
@@ -873,10 +873,25 @@ final class Aerospike
     }
 
     /**
-     * @param array $keys
-     * @param array $records
-     * @param array $filter
-     * @param array $options
+     * Gets a batch of record from the Aerospike database.
+     *
+     * <code>
+     * $client = new Aerospike($config);
+     *
+     * $key1 = $client->initKey('test', 'users', 1234);
+     * $key1 = $client->initKey('test', 'users', 1235); // this key does not exist
+     * $key1 = $client->initKey('test', 'users', 1236);
+     *
+     * $status = $client->getMany([$key1, $key2, $key3], $records);
+     *
+     * var_dump($status, $records);
+     * </code>
+     *
+     * @param array $keys    The key identifying the record.
+     *                       An array with keys ['ns','set','key'] or ['ns','set','digest'].
+     * @param array $records Filled by an indexed array of record values.
+     * @param array $filter  An array of bin names. Non-existent bins have a NULL value. [Optional]
+     * @param array $options Options including: Aerospike::OPT_READ_TIMEOUT. [Optional]
      *
      * @return int
      */
@@ -885,9 +900,24 @@ final class Aerospike
     }
 
     /**
-     * @param array $keys
-     * @param array $metadata
-     * @param array $options
+     * Checks if a batch of records exist in the Aerospike database.
+     *
+     * <code>
+     * $client = new Aerospike($config);
+     *
+     * $key1 = $client->initKey('test', 'users', 1234);
+     * $key1 = $client->initKey('test', 'users', 1235); // this key does not exist
+     * $key1 = $client->initKey('test', 'users', 1236);
+     *
+     * $status = $client->existsMany([$key1, $key2, $key3], $records);
+     *
+     * var_dump($status, $metadata);
+     * </code>
+     *
+     * @param array $keys     The key identifying the record.
+     *                        An array with keys ['ns','set','key'] or ['ns','set','digest'].
+     * @param array $metadata Filled by an array of metadata arrays.
+     * @param array $options  Options including: Aerospike::OPT_READ_TIMEOUT. [Optional]
      *
      * @return int
      */
